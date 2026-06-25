@@ -1,0 +1,212 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Cloud Security Practice</title>
+<meta name="description" content="Hands-on cloud security environments." />
+<style>
+  :root {
+    --bg: #0c1014;
+    --bg-2: #0f141a;
+    --surface: #141a21;
+    --surface-hi: #18202a;
+    --border: #232c38;
+    --border-hi: #3a4757;
+    --text: #e7edf4;
+    --muted: #8a97a6;
+    --faint: #5b6675;
+    --accent: #4d9fff;
+    --live: #3fd07f;
+    /* Single family used throughout. */
+    --font: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  }
+
+  * { box-sizing: border-box; }
+
+  html, body { height: 100%; }
+
+  body {
+    margin: 0;
+    background:
+      radial-gradient(120% 80% at 50% -10%, var(--bg-2) 0%, var(--bg) 60%);
+    color: var(--text);
+    font-family: var(--font);
+    -webkit-font-smoothing: antialiased;
+    display: flex;
+    flex-direction: column;
+    min-height: 100%;
+  }
+
+  .wrap {
+    width: 100%;
+    max-width: 680px;
+    margin: 0 auto;
+    padding: clamp(28px, 7vw, 72px) 24px;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: clamp(36px, 7vw, 60px);
+  }
+
+  /* Header */
+  .mark {
+    font-family: var(--font);
+    font-size: 12px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--faint);
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .mark .dot {
+    width: 6px; height: 6px; border-radius: 50%;
+    background: var(--live);
+    box-shadow: 0 0 0 0 rgba(63, 208, 127, 0.5);
+    animation: pulse 2.4s ease-out infinite;
+  }
+  .lede {
+    margin-top: 18px;
+    font-family: var(--font);
+    font-weight: 500;
+    font-size: clamp(27px, 6vw, 42px);
+    line-height: 1.16;
+    letter-spacing: -0.01em;
+    max-width: 18ch;
+  }
+  .lede .em { color: var(--muted); font-style: italic; }
+
+  /* Destination list */
+  .nodes {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+  }
+
+  .node {
+    display: block;
+    text-decoration: none;
+    color: inherit;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 22px 22px 18px;
+    transition: transform 0.18s ease, border-color 0.18s ease, background 0.18s ease;
+  }
+  .node:hover, .node:focus-visible {
+    transform: translateY(-2px);
+    border-color: var(--border-hi);
+    background: var(--surface-hi);
+    outline: none;
+  }
+  .node:focus-visible { box-shadow: 0 0 0 2px var(--accent); }
+
+  .node-top {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 16px;
+  }
+  .node-name {
+    font-family: var(--font);
+    font-weight: 600;
+    font-size: clamp(21px, 4.5vw, 27px);
+    letter-spacing: -0.01em;
+  }
+  .badge {
+    font-family: var(--font);
+    font-size: 11px;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--live);
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    white-space: nowrap;
+  }
+  .badge .dot { width: 5px; height: 5px; border-radius: 50%; background: var(--live); }
+
+  .node-desc {
+    margin: 9px 0 18px;
+    color: var(--muted);
+    font-size: 15.5px;
+    line-height: 1.55;
+    max-width: 46ch;
+  }
+
+  .node-path {
+    font-family: var(--font);
+    font-size: 13.5px;
+    letter-spacing: 0.01em;
+    color: var(--faint);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    border-top: 1px solid var(--border);
+    padding-top: 14px;
+    transition: color 0.18s ease;
+  }
+  .node:hover .node-path, .node:focus-visible .node-path { color: var(--accent); }
+  .node-path .arrow { margin-left: auto; transition: transform 0.18s ease; }
+  .node:hover .arrow, .node:focus-visible .arrow { transform: translate(2px, -2px); }
+
+  footer {
+    border-top: 1px solid var(--border);
+    padding: 18px 24px;
+    text-align: center;
+    font-family: var(--font);
+    font-size: 12px;
+    letter-spacing: 0.06em;
+    color: var(--faint);
+  }
+
+  @keyframes pulse {
+    0%   { box-shadow: 0 0 0 0 rgba(63, 208, 127, 0.45); }
+    70%  { box-shadow: 0 0 0 7px rgba(63, 208, 127, 0); }
+    100% { box-shadow: 0 0 0 0 rgba(63, 208, 127, 0); }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .mark .dot { animation: none; }
+    .node, .arrow, .node-path { transition: none; }
+  }
+</style>
+</head>
+<body>
+  <main class="wrap">
+    <header>
+      <div class="mark"><span class="dot"></span>cloudsecuritypractice.com</div>
+      <h1 class="lede">Cloud security proofs of concept</h1>
+    </header>
+
+    <nav class="nodes" aria-label="Environments">
+      <a class="node" href="https://prowler.cloudsecuritypractice.com">
+        <div class="node-top">
+          <span class="node-name">Prowler</span>
+          <span class="badge"><span class="dot"></span>live</span>
+        </div>
+        <p class="node-desc">A defense-in-depth project securing every layer of a real, running system: Prowler remediated all 19 findings across AWS, GCP, and Azure (verified by re-scan), the live dashboard runs 24/7 on Cloud Run reachable only through Cloudflare's CDN, proxy, and WAF, every change clears automated gates spanning supply-chain, SAST, secrets, IaC, and container scanning, and the AI tool that built it ran sandboxed with egress allowlisting. The supply-chain layer is the part worth noticing: it blocks malicious packages, not just vulnerable ones.</p>
+        <div class="node-path">
+          <span>prowler.cloudsecuritypractice.com</span>
+          <span class="arrow" aria-hidden="true">&#8599;</span>
+        </div>
+      </a>
+
+      <a class="node" href="https://loonvault.cloudsecuritypractice.com">
+        <div class="node-top">
+          <span class="node-name">LoonVault</span>
+          <span class="badge"><span class="dot"></span>live</span>
+        </div>
+        <p class="node-desc">A secure cloud data platform mapped control-by-control to the OSFI B-13 cyber-risk framework with a working STRIDE threat model: a public read API fronted by Cloudflare (WAF, rate-limiting, Zero-Trust MFA on the admin plane) over a least-privilege AWS stack in ca-central-1, with RDS IAM auth and no stored database credentials, private no-NAT subnets, customer-managed encryption, a region-lock SCP, and org-wide CloudTrail. The centerpiece is policy-as-code: an OPA gate checks every Terraform change before deploy and blocks open SSH, public buckets, or out-of-region resources, each rule tied to the OSFI principle it enforces so the compliance evidence can't drift from the code.</p>
+        <div class="node-path">
+          <span>loonvault.cloudsecuritypractice.com</span>
+          <span class="arrow" aria-hidden="true">&#8599;</span>
+        </div>
+      </a>
+    </nav>
+  </main>
+
+  <footer>built for practice &middot; not a production system</footer>
+</body>
+</html>
