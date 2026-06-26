@@ -40,7 +40,7 @@
 
   .wrap {
     width: 100%;
-    max-width: 680px;
+    max-width: 800px;
     margin: 0 auto;
     padding: clamp(28px, 7vw, 72px) 24px;
     flex: 1;
@@ -196,9 +196,9 @@
       <a class="node" href="https://loonvault.cloudsecuritypractice.com">
         <div class="node-top">
           <span class="node-name">LoonVault</span>
-          <span class="badge"><span class="dot"></span>live</span>
+          <span class="badge"><span class="dot"></span>beta</span>
         </div>
-        <p class="node-desc">A secure cloud data platform mapped control-by-control to the OSFI B-13 cyber-risk framework with a working STRIDE threat model: a public read API fronted by Cloudflare (WAF, rate-limiting, Zero-Trust MFA on the admin plane) over a least-privilege AWS stack in ca-central-1, with RDS IAM auth and no stored database credentials, private no-NAT subnets, customer-managed encryption, a region-lock SCP, and org-wide CloudTrail. The centerpiece is policy-as-code: an OPA gate checks every Terraform change before deploy and blocks open SSH, public buckets, or out-of-region resources, each rule tied to the OSFI principle it enforces so the compliance evidence can't drift from the code.</p>
+        <p class="node-desc">A secure cloud data platform mapped control-by-control to the OSFI B-13 cyber-risk framework, with a working STRIDE threat model: a least-privilege AWS stack in ca-central-1 fronted by Cloudflare (WAF, rate-limiting), with RDS IAM auth and no stored credentials, private no-NAT subnets, customer-managed encryption, a region-lock SCP defined as code, and org-wide CloudTrail. The full data path (API Gateway &rarr; authorizer &rarr; Lambda &rarr; RDS) is built and validated end-to-end. The centerpiece is policy-as-code: an OPA-on-plan gate runs 20 tests against every Terraform change before deploy, blocking open SSH, public buckets, or out-of-region resources, each rule tied to the OSFI principle it enforces so compliance evidence can't drift from the code. Next: detection-and-response, wiring Prowler and the remaining rules onto the same control map.</p>
         <div class="node-path">
           <span>loonvault.cloudsecuritypractice.com</span>
           <span class="arrow" aria-hidden="true">&#8599;</span>
