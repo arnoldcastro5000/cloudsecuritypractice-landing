@@ -76,6 +76,13 @@
     max-width: 18ch;
   }
   .lede .em { color: var(--muted); font-style: italic; }
+  .sub {
+    margin-top: 12px;
+    font-family: var(--font);
+    font-size: clamp(14px, 2.6vw, 16px);
+    letter-spacing: 0.02em;
+    color: var(--muted);
+  }
 
   /* Destination list */
   .nodes {
@@ -178,6 +185,7 @@
     <header>
       <div class="mark"><span class="dot"></span>cloudsecuritypractice.com</div>
       <h1 class="lede">Cloud security proofs of concept</h1>
+      <p class="sub">AI-built, security-reviewed.</p>
     </header>
 
     <nav class="nodes" aria-label="Environments">
