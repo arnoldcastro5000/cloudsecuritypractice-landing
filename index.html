@@ -67,22 +67,35 @@
     animation: pulse 2.4s ease-out infinite;
   }
   .lede {
-    margin-top: 18px;
+    margin-top: 22px;
     font-family: var(--font);
-    font-weight: 500;
-    font-size: clamp(27px, 6vw, 42px);
-    line-height: 1.16;
-    letter-spacing: -0.01em;
-    max-width: 18ch;
+    font-weight: 600;
+    font-size: clamp(2.6rem, 8.5vw, 5rem);
+    line-height: 0.98;
+    letter-spacing: -0.03em;
+    text-wrap: balance;
+    max-width: 14ch;
   }
   .lede .em { color: var(--muted); font-style: italic; }
   .sub {
-    margin-top: 12px;
+    margin-top: 16px;
     font-family: var(--font);
     font-size: clamp(14px, 2.6vw, 16px);
     letter-spacing: 0.02em;
     color: var(--muted);
   }
+
+  /* Staggered hero entry: fade up and deblur. Total under 800ms. */
+  @keyframes heroRise {
+    from { opacity: 0; transform: translateY(22px); filter: blur(8px); }
+    to   { opacity: 1; transform: translateY(0);    filter: blur(0); }
+  }
+  .mark, .lede, .sub {
+    animation: heroRise 0.6s cubic-bezier(0.16, 1, 0.3, 1) both;
+  }
+  .mark { animation-delay: 0s; }
+  .lede { animation-delay: 0.1s; }
+  .sub  { animation-delay: 0.2s; }
 
   /* Destination list */
   .nodes {
@@ -184,6 +197,7 @@
 
   @media (prefers-reduced-motion: reduce) {
     .mark .dot { animation: none; }
+    .mark, .lede, .sub { animation: none; }
     .node, .arrow, .node-path { transition: none; }
   }
 </style>
