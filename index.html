@@ -18,6 +18,7 @@
     --faint: #5b6675;
     --accent: #4d9fff;
     --live: #3fd07f;
+    --beta: #e8b34b;
     /* Single family used throughout. */
     --font: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
   }
@@ -146,13 +147,15 @@
     font-size: 11px;
     letter-spacing: 0.16em;
     text-transform: uppercase;
-    color: var(--live);
     display: inline-flex;
     align-items: center;
     gap: 7px;
     white-space: nowrap;
   }
-  .badge .dot { width: 5px; height: 5px; border-radius: 50%; background: var(--live); }
+  .badge .dot { width: 5px; height: 5px; border-radius: 50%; background: currentColor; }
+  .badge--live { color: var(--live); }
+  .badge--live .dot { --pulse-spread: 6px; animation: pulse 2.4s ease-out infinite; }
+  .badge--beta { color: var(--beta); }
 
   .node-desc {
     margin: 9px 0 18px;
@@ -198,12 +201,12 @@
 
   @keyframes pulse {
     0%   { box-shadow: 0 0 0 0 rgba(63, 208, 127, 0.45); }
-    70%  { box-shadow: 0 0 0 7px rgba(63, 208, 127, 0); }
+    70%  { box-shadow: 0 0 0 var(--pulse-spread, 7px) rgba(63, 208, 127, 0); }
     100% { box-shadow: 0 0 0 0 rgba(63, 208, 127, 0); }
   }
 
   @media (prefers-reduced-motion: reduce) {
-    .mark .dot { animation: none; }
+    .mark .dot, .badge--live .dot { animation: none; }
     .mark, .lede, .sub, .node { animation: none; }
     .node, .arrow, .node-path { transition: none; }
   }
@@ -221,7 +224,7 @@
       <a class="node" style="--i: 0" href="https://prowler.cloudsecuritypractice.com">
         <div class="node-top">
           <span class="node-name">Prowler</span>
-          <span class="badge"><span class="dot"></span>live</span>
+          <span class="badge badge--live"><span class="dot"></span>live</span>
         </div>
         <p class="node-desc">A defense-in-depth project securing every layer of a real, running system: Prowler remediated all 19 findings across AWS, GCP, and Azure (verified by re-scan), the live dashboard runs 24/7 on Cloud Run reachable only through Cloudflare's CDN, proxy, and WAF, every change clears automated gates spanning supply-chain, SAST, secrets, IaC, and container scanning, and the AI tool that built it ran sandboxed with egress allowlisting. The supply-chain layer is the part worth noticing: it blocks malicious packages, not just vulnerable ones.</p>
         <div class="node-path">
@@ -234,7 +237,7 @@
       <a class="node" style="--i: 1" href="https://loonvault.cloudsecuritypractice.com">
         <div class="node-top">
           <span class="node-name">LoonVault</span>
-          <span class="badge"><span class="dot"></span>beta</span>
+          <span class="badge badge--beta"><span class="dot"></span>beta</span>
         </div>
         <p class="node-desc">A secure cloud data platform mapped control-by-control to the OSFI B-13 cyber-risk framework, with a working STRIDE threat model: a least-privilege AWS stack in ca-central-1 fronted by Cloudflare (WAF, rate-limiting), with RDS IAM auth and no stored credentials, private no-NAT subnets, customer-managed encryption, a region-lock SCP defined as code, and org-wide CloudTrail. The full data path (API Gateway &rarr; authorizer &rarr; Lambda &rarr; RDS) is built and validated end-to-end. The centerpiece is policy-as-code: an OPA-on-plan gate runs 20 tests against every Terraform change before deploy, blocking open SSH, public buckets, or out-of-region resources, each rule tied to the OSFI principle it enforces so compliance evidence can't drift from the code. Next: detection-and-response, wiring Prowler and the remaining rules onto the same control map.</p>
         <div class="node-path">
