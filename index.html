@@ -189,6 +189,11 @@
   .node-path .arrow { transition: transform 0.18s ease; }
   .node:hover .arrow, .node:focus-visible .arrow { transform: translate(2px, -2px); }
 
+  /* Touch screens have no hover, so the launch label is always shown. */
+  @media (hover: none) {
+    .node-path .cta { opacity: 1; }
+  }
+
   footer {
     border-top: 1px solid var(--border);
     padding: 18px 24px;
