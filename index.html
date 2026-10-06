@@ -289,6 +289,30 @@
     100% { box-shadow: 0 0 0 0 rgba(63, 208, 127, 0); }
   }
 
+  /* Headline caret sweep (driven by the script below). The letter spans only
+     change colour, so line breaking is untouched; the dots and the caret live
+     in one aria-hidden overlay at the end of the headline. */
+  .lede { position: relative; }
+  .lede .ch.pending { color: transparent; }
+  .sweep { position: absolute; inset: 0; pointer-events: none; }
+  .sweep i {
+    position: absolute;
+    width: 0.16em;
+    height: 0.16em;
+    margin: -0.08em 0 0 -0.08em;
+    border-radius: 0.02em;
+    background: var(--faint);
+  }
+  .sweep b {
+    position: absolute;
+    width: 3px;
+    border-radius: 1px;
+    background: var(--accent);
+  }
+  .sweep b.end { animation: caretBlink 0.9s steps(1) 2, caretOut 0.3s ease 1.8s forwards; }
+  @keyframes caretBlink { 50% { opacity: 0; } }
+  @keyframes caretOut { to { opacity: 0; } }
+
   @media (prefers-reduced-motion: reduce) {
     .mark .dot, .badge--live .dot { animation: none; }
     .masthead, .lede, .sub, .node { animation: none; }
@@ -358,6 +382,60 @@
         node.style.setProperty("--my", `${e.clientY - r.top}px`);
       });
     }
+
+    // Headline caret sweep: a caret reveals "proofs of concept" once on load,
+    // then the headline goes back to plain text. Without JS, or with reduced
+    // motion, the headline is plain text from the start.
+    (() => {
+      if (matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+      const lede = document.querySelector(".lede");
+      const text = lede.textContent;
+      const from = text.indexOf("proofs");
+      const start = 150, step = 50, caretLinger = 2100;
+
+      lede.textContent = text.slice(0, from);
+      const chars = [];
+      for (const c of text.slice(from)) {
+        if (c === " ") { lede.append(" "); continue; }
+        const span = document.createElement("span");
+        span.className = "ch pending";
+        span.textContent = c;
+        lede.append(span);
+        chars.push(span);
+      }
+
+      const overlay = document.createElement("span");
+      overlay.className = "sweep";
+      overlay.setAttribute("aria-hidden", "true");
+      const dots = chars.map(() => overlay.appendChild(document.createElement("i")));
+      const caret = overlay.appendChild(document.createElement("b"));
+      lede.append(overlay);
+
+      // Place the dots on the pending letters and the caret before letter
+      // `next` (after the last letter once all are revealed).
+      const place = (next) => {
+        const box = lede.getBoundingClientRect();
+        const em = parseFloat(getComputedStyle(lede).fontSize);
+        chars.forEach((span, i) => {
+          span.classList.toggle("pending", i >= next);
+          dots[i].hidden = i < next;
+          if (i < next) return;
+          const r = span.getBoundingClientRect();
+          dots[i].style.left = `${r.left - box.left + r.width / 2}px`;
+          dots[i].style.top = `${r.top - box.top + r.height * 0.4}px`;
+        });
+        const done = next >= chars.length;
+        const r = chars[done ? chars.length - 1 : next].getBoundingClientRect();
+        caret.style.left = `${(done ? r.right + 2 : r.left - 2) - box.left}px`;
+        caret.style.top = `${r.top - box.top + 0.12 * em}px`;
+        caret.style.height = `${r.height - 0.16 * em}px`;
+        caret.classList.toggle("end", done);
+      };
+
+      place(0);
+      chars.forEach((_, i) => setTimeout(() => place(i + 1), start + (i + 1) * step));
+      setTimeout(() => { lede.textContent = text; }, start + chars.length * step + caretLinger);
+    })();
   </script>
 </body>
 </html>
