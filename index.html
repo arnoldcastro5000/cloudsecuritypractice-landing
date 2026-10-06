@@ -3,438 +3,878 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>Cloud Security Practice</title>
-<meta name="description" content="Hands-on cloud security environments." />
+<title>Arnold Castro · Cloud security proofs of concept</title>
+<meta name="description" content="AI-built, security-reviewed cloud security proofs of concept by Arnold Castro, Cloud Security Specialist." />
+<meta name="theme-color" content="#131312" />
+<meta property="og:type" content="website" />
+<meta property="og:url" content="https://cloudsecuritypractice.com/" />
+<meta property="og:title" content="Arnold Castro · Cloud security proofs of concept" />
+<meta property="og:description" content="AI-built, security-reviewed. Live cloud security systems with verified results: Prowler and LoonVault." />
+<meta name="twitter:card" content="summary" />
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' fill='%23131312'/%3E%3Cpath d='M9 4v24' stroke='%238a857a' stroke-width='1.5'/%3E%3Cpath d='M19 6v20M22 6v20' stroke='%23c9a95a' stroke-width='1.5'/%3E%3C/svg%3E" />
+<link rel="preload" href="fonts/sofia-sans-extra-condensed-latin-wght-normal.woff2" as="font" type="font/woff2" crossorigin />
+<link rel="preload" href="fonts/sofia-sans-condensed-latin-wght-normal.woff2" as="font" type="font/woff2" crossorigin />
+<link rel="preload" href="fonts/sofia-sans-latin-wght-normal.woff2" as="font" type="font/woff2" crossorigin />
 <style>
+  @font-face {
+    font-family: "Sofia Sans Extra Condensed";
+    src: url("fonts/sofia-sans-extra-condensed-latin-wght-normal.woff2") format("woff2-variations");
+    font-weight: 1 1000;
+    font-style: normal;
+    font-display: swap;
+  }
+  @font-face {
+    font-family: "Sofia Sans Condensed";
+    src: url("fonts/sofia-sans-condensed-latin-wght-normal.woff2") format("woff2-variations");
+    font-weight: 1 1000;
+    font-style: normal;
+    font-display: swap;
+  }
+  @font-face {
+    font-family: "Sofia Sans";
+    src: url("fonts/sofia-sans-latin-wght-normal.woff2") format("woff2-variations");
+    font-weight: 1 1000;
+    font-style: normal;
+    font-display: swap;
+  }
+
   :root {
-    --bg: #0c1014;
-    --bg-2: #0f141a;
-    --surface: #141a21;
-    --surface-hi: #18202a;
-    --border: #232c38;
-    --border-hi: #3a4757;
-    --text: #e7edf4;
-    --muted: #8a97a6;
-    --faint: #5b6675;
-    --accent: #4d9fff;
-    --accent-hi: #8cc2ff;
-    --live: #3fd07f;
-    --beta: #e8b34b;
-    /* Single family used throughout. */
-    --font: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    color-scheme: dark;
+
+    /* Charcoal continuum and the plates that sit on it. */
+    --ground: #131312;
+    --plate: #1a1a18;
+    --plate-hi: #20201e;
+
+    /* Bone ink, ranked by strength. All pass AA on --plate. */
+    --bone: #dcd6c8;
+    --bone-2: #b0aa9c;
+    --bone-3: #8f8a7e;
+
+    /* Structure is hairlines, never fills. */
+    --rule: #2c2b28;
+    --rule-hi: #45433e;
+
+    /* Muted emission lines: one hue per system. Sodium marks the active line only. */
+    --sodium: #c9a95a;
+    --line-green: #8ea283;
+    --line-cyan: #7f9ba5;
+
+    /* Width ranks the family: extra condensed display, condensed labels, regular prose. */
+    --display: "Sofia Sans Extra Condensed", "Arial Narrow", sans-serif;
+    --condensed: "Sofia Sans Condensed", "Arial Narrow", sans-serif;
+    --sans: "Sofia Sans", ui-sans-serif, system-ui, sans-serif;
+
+    /* One damped overshoot: the way a landing line settles. */
+    --settle: linear(0, 0.2 8%, 0.62 18%, 0.94 28%, 1.07 38%, 1.09 44%, 1.04 56%, 0.995 70%, 1);
+    --settle-time: 620ms;
+
+    --legend-w: clamp(15rem, 22vw, 19rem);
+    --gutter: clamp(1.5rem, 4vw, 4rem);
+    --main-pad: clamp(2.5rem, 5vw, 5rem);
+    --pitch: 24px;
   }
 
   * { box-sizing: border-box; }
 
-  html, body { height: 100%; }
+  html {
+    background: var(--ground);
+    scrollbar-color: var(--rule-hi) var(--ground);
+    scroll-padding-top: 1.5rem;
+  }
 
   body {
     margin: 0;
-    background:
-      radial-gradient(120% 80% at 50% -10%, var(--bg-2) 0%, var(--bg) 60%);
-    color: var(--text);
-    font-family: var(--font);
+    color: var(--bone);
+    font-family: var(--sans);
+    font-size: 1rem;
+    line-height: 1.55;
+    font-variant-numeric: tabular-nums;
     -webkit-font-smoothing: antialiased;
-    display: flex;
-    flex-direction: column;
-    min-height: 100%;
+    text-rendering: optimizeLegibility;
   }
 
-  .wrap {
-    width: 100%;
-    max-width: 800px;
-    margin: 0 auto;
-    padding: clamp(28px, 7vw, 72px) 24px;
-    flex: 1;
-    display: flex;
-    flex-direction: column;
-    gap: clamp(36px, 7vw, 60px);
+  ::selection { background: var(--sodium); color: var(--ground); }
+
+  a { color: inherit; }
+
+  :focus-visible {
+    outline: 1px dashed var(--sodium);
+    outline-offset: 4px;
   }
 
-  /* Header */
-  .masthead {
-    display: flex;
-    flex-wrap: wrap;
-    align-items: center;
-    justify-content: space-between;
-    gap: 12px 16px;
-  }
-  .mark {
-    font-family: var(--font);
-    font-size: 12px;
-    letter-spacing: 0.18em;
-    text-transform: uppercase;
-    color: var(--faint);
-    display: flex;
-    align-items: center;
-    gap: 10px;
-  }
-  .mark .dot {
-    width: 6px; height: 6px; border-radius: 50%;
-    background: var(--live);
-    box-shadow: 0 0 0 0 rgba(63, 208, 127, 0.5);
-    animation: pulse 2.4s ease-out infinite;
+  .sr {
+    position: absolute;
+    width: 1px; height: 1px;
+    overflow: hidden;
+    clip-path: inset(50%);
+    white-space: nowrap;
   }
 
-  /* Profile links: same icons, sizes, and order as the project sites. The
-     negative margins keep the 32px tap targets from growing the row, and
-     align the glyph edge with the card edge. */
-  .social {
-    display: flex;
-    gap: 8px;
-    margin: -10px -6px -10px auto;
-  }
-  .social a {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    width: 32px;
-    height: 32px;
-    border-radius: 6px;
-    transition: color 0.18s ease;
-  }
-  .social svg { width: 20px; height: 20px; }
-  .social .linkedin { color: var(--accent); }
-  .social .linkedin:hover { color: var(--accent-hi); }
-  .social .github { color: var(--muted); }
-  .social .github:hover { color: var(--text); }
-  .social a:focus-visible { outline: 2px solid var(--accent); outline-offset: 0; }
-  /* Tighter tracking keeps the icons on the eyebrow row down to 375px. */
-  @media (max-width: 399px) {
-    .mark { letter-spacing: 0.12em; }
-  }
+  /* Each system owns one emission hue. */
+  [data-sys="prowler"] { --hue: var(--line-green); }
+  [data-sys="loonvault"] { --hue: var(--line-cyan); }
 
-  .lede {
-    /* Reset the default h1 bottom margin so .sub's 16px sets the gap. */
-    margin: 22px 0 0;
-    font-family: var(--font);
-    font-weight: 600;
-    font-size: clamp(2.6rem, 8.5vw, 5rem);
-    line-height: 0.98;
-    letter-spacing: -0.03em;
-    text-wrap: balance;
-    max-width: 14ch;
-  }
-  .lede .em { color: var(--muted); font-style: italic; }
-  .sub {
-    margin-top: 16px;
-    font-family: var(--font);
-    font-size: clamp(14px, 2.6vw, 16px);
-    letter-spacing: 0.02em;
-    color: var(--muted);
-  }
-
-  /* Staggered hero entry: fade up and deblur. Total under 800ms. */
-  @keyframes heroRise {
-    from { opacity: 0; transform: translateY(22px); filter: blur(8px); }
-    to   { opacity: 1; transform: translateY(0);    filter: blur(0); }
-  }
-  .masthead, .lede, .sub {
-    animation: heroRise 0.6s cubic-bezier(0.16, 1, 0.3, 1) both;
-  }
-  .masthead { animation-delay: 0s; }
-  .lede { animation-delay: 0.1s; }
-  .sub  { animation-delay: 0.2s; }
-
-  /* Cards continue the stagger after the hero. "backwards" (not "both") so the
-     final keyframe does not hold transform and block the hover lift. */
-  .node {
-    animation: heroRise 0.6s cubic-bezier(0.16, 1, 0.3, 1) backwards;
-    animation-delay: calc(0.3s + var(--i, 0) * 0.1s);
-  }
-
-  /* Destination list */
-  .nodes {
-    display: flex;
-    flex-direction: column;
-    gap: 14px;
-  }
-
-  .node {
+  /* A registration mark: a small ring that sits where two lines meet. */
+  .reg {
     display: block;
-    text-decoration: none;
-    color: inherit;
-    background: var(--surface);
-    border: 1px solid var(--border);
-    border-radius: 12px;
-    padding: 22px 22px 18px;
-    transition: transform 0.18s ease, border-color 0.18s ease, background 0.18s ease;
+    width: 7px;
+    height: 7px;
+    border: 1px solid var(--rule-hi);
+    border-radius: 50%;
+    background: var(--ground);
   }
-  .node:hover, .node:focus-visible {
-    transform: translateY(-2px);
-    border-color: var(--border-hi);
-    background: var(--surface-hi);
-    outline: none;
-  }
-  .node:focus-visible { box-shadow: 0 0 0 2px var(--accent); }
 
-  .node-top {
+  /* ---------- Frame: legend, rail, plates ---------- */
+
+  .frame {
+    display: grid;
+    grid-template-columns: var(--legend-w) minmax(0, 1fr);
+    max-width: 92rem;
+    margin: 0 auto;
+    padding: 0 var(--gutter);
+  }
+
+  /* The legend hangs off the left side of the rail and stays put. */
+  .legend {
+    position: sticky;
+    top: 0;
+    align-self: start;
+    height: 100vh;
+    height: 100svh;
     display: flex;
-    align-items: baseline;
-    justify-content: space-between;
-    gap: 16px;
+    flex-direction: column;
+    padding: 3.25rem 0 2.25rem;
   }
-  .node-name {
-    font-family: var(--font);
-    font-weight: 600;
-    font-size: clamp(21px, 4.5vw, 27px);
-    letter-spacing: -0.01em;
+
+  /* The calibrated rail: one hairline with ticks on a fixed pitch, ring to ring. */
+  .legend::after {
+    content: "";
+    position: absolute;
+    top: 1.75rem; bottom: 1.75rem; right: 0;
+    width: 9px;
+    transform: translateX(4px);
+    background-image:
+      linear-gradient(var(--rule-hi), var(--rule-hi)),
+      linear-gradient(to bottom, var(--rule-hi) 1px, transparent 1px);
+    background-size: 1px 100%, 9px var(--pitch);
+    background-position: center top, center var(--tick-y, 0px);
+    background-repeat: no-repeat, repeat-y;
+    pointer-events: none;
   }
-  .badge {
-    font-family: var(--font);
-    font-size: 11px;
+  .legend > .reg {
+    position: absolute;
+    right: 0;
+    transform: translate(50%, -50%);
+  }
+  .legend > .reg--top { top: 1.75rem; }
+  .legend > .reg--end { top: calc(100% - 1.75rem); }
+
+  .owner { padding-right: 2rem; }
+  .owner-name {
+    margin: 0;
+    font-family: var(--condensed);
+    font-weight: 500;
+    font-size: 1.875rem;
+    line-height: 1;
+    letter-spacing: 0.01em;
+    color: var(--bone);
+  }
+  .owner-role {
+    margin: 0.625rem 0 0;
+    font-family: var(--condensed);
+    font-weight: 500;
+    font-size: 0.875rem;
     letter-spacing: 0.16em;
     text-transform: uppercase;
+    color: var(--bone-2);
+  }
+
+  .profiles {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0 1.25rem;
+    margin: 1.25rem 0 0;
+    padding: 0;
+    list-style: none;
+  }
+  .profiles a {
     display: inline-flex;
     align-items: center;
-    gap: 7px;
+    gap: 0.5rem;
+    min-height: 2.75rem;
+    font-family: var(--condensed);
+    font-weight: 500;
+    font-size: 0.875rem;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    text-decoration: none;
+    color: var(--bone-2);
+    transition: color 160ms ease-out;
+  }
+  .profiles a:hover { color: var(--bone); }
+  .profiles svg { width: 1rem; height: 1rem; flex: none; }
+
+  /* Every destination is a line in its own hue that runs into the rail. */
+  .index {
+    margin: 3rem 0 0;
+    padding: 0;
+    list-style: none;
+  }
+  .index a {
+    position: relative;
+    display: grid;
+    grid-template-columns: auto minmax(2rem, 1fr);
+    align-items: center;
+    column-gap: 0.875rem;
+    height: calc(var(--pitch) * 2);
+    text-decoration: none;
+    color: var(--bone-2);
+    transition: color 160ms ease-out;
+  }
+  .index a:hover { color: var(--bone); }
+  .index .label {
+    display: flex;
+    flex-direction: column;
+    line-height: 1.15;
+  }
+  .index .name {
+    font-family: var(--condensed);
+    font-weight: 500;
+    font-size: 1.125rem;
+    letter-spacing: 0.02em;
+  }
+  .index .state {
+    font-family: var(--condensed);
+    font-size: 0.75rem;
+    font-weight: 500;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--bone-3);
+  }
+  .index .seg {
+    position: relative;
+    grid-column: 2;
+    grid-row: 1;
+    height: 1px;
+    margin-right: 0;
+    background: var(--hue);
+    transform-origin: right center;
+  }
+  .index [data-state="beta"] .seg {
+    background: repeating-linear-gradient(to right, var(--hue) 0 6px, transparent 6px 10px);
+  }
+  /* The ring where the line registers on the rail. */
+  .index .seg .reg {
+    position: absolute;
+    top: 50%; right: 0;
+    transform: translate(50%, -50%);
+    border-color: var(--hue);
+  }
+  .index a[aria-current="true"] { color: var(--bone); }
+  .index a[aria-current="true"] .state { color: var(--sodium); }
+  .index a[aria-current="true"] .seg {
+    height: 4px;
+    background:
+      linear-gradient(var(--sodium), var(--sodium)) top / 100% 1px no-repeat,
+      linear-gradient(var(--sodium), var(--sodium)) bottom / 100% 1px no-repeat;
+    animation: land var(--settle-time) var(--settle) both;
+  }
+  .index [data-state="beta"][aria-current="true"] .seg {
+    background:
+      repeating-linear-gradient(to right, var(--sodium) 0 6px, transparent 6px 10px) top / 100% 1px no-repeat,
+      repeating-linear-gradient(to right, var(--sodium) 0 6px, transparent 6px 10px) bottom / 100% 1px no-repeat;
+  }
+  .index a[aria-current="true"] .seg .reg { border-color: var(--sodium); }
+  @keyframes land {
+    from { transform: scaleX(0.35); }
+    to { transform: scaleX(1); }
+  }
+
+  /* The honest scope, registered at the foot of the legend. */
+  .scope {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    margin: auto 2rem 0 0;
+    font-size: 0.875rem;
+    line-height: 1.45;
+    color: var(--bone-3);
+  }
+  .scope .reg { flex: none; }
+
+  /* ---------- Plate column ---------- */
+
+  main {
+    container-type: inline-size;
+    min-width: 0;
+    padding: 3.25rem 0 6rem var(--main-pad);
+  }
+
+  .claim h1 {
+    margin: 0;
+    font-family: var(--display);
+    font-weight: 350;
+    font-size: clamp(2.5rem, 15cqi, 6rem);
+    line-height: 0.9;
+    letter-spacing: 0.005em;
+    text-transform: uppercase;
+    color: var(--bone);
+  }
+  .claim h1 > span { display: block; }
+  /* The face draws its hyphen nearly as wide as a cap; set it to the weight of the stems. */
+  .claim h1 .hy {
+    display: inline-block;
+    margin: 0 -0.075em;
+    transform: scaleX(0.55);
+  }
+  .claim .standfirst {
+    margin: 1.375rem 0 0;
+    font-family: var(--condensed);
+    font-weight: 400;
+    font-size: clamp(1.125rem, 2.4cqi, 1.5rem);
+    letter-spacing: 0.04em;
+    color: var(--bone-2);
+  }
+
+  /* The continuum: a stepped charcoal-to-ash ramp with each system's line registered on a band edge. */
+  .continuum {
+    position: relative;
+    height: clamp(5.5rem, 13cqi, 8.5rem);
+    margin: 2.25rem 0 0;
+    background: linear-gradient(90deg,
+      #161615 0 7.1429%, #191918 0 14.2857%, #1c1c1a 0 21.4286%, #1f1f1d 0 28.5714%,
+      #222220 0 35.7143%, #252523 0 42.8571%, #282826 0 50%, #2b2a28 0 57.1429%,
+      #2e2d2a 0 64.2857%, #31302d 0 71.4286%, #343330 0 78.5714%, #373632 0 85.7143%,
+      #3a3935 0 92.8571%, #3d3c38 0 100%);
+  }
+  .continuum .em {
+    position: absolute;
+    top: 0; bottom: 0;
+    left: var(--x);
+    width: 1px;
+    background: var(--c, var(--hue));
+    opacity: 0.8;
+    transition: opacity 240ms ease-out;
+    animation: arrive var(--settle-time) var(--settle) backwards;
+    animation-delay: var(--d, 0ms);
+  }
+  .continuum .em[data-state="beta"] {
+    background: repeating-linear-gradient(to bottom, var(--c, var(--hue)) 0 7px, transparent 7px 12px);
+  }
+  .continuum .em::after {
+    content: "";
+    position: absolute;
+    top: 0; bottom: 0; left: 3px;
+    width: 1px;
+    background: inherit;
+    opacity: 0;
+    transition: opacity 240ms ease-out;
+  }
+  .continuum .em[data-active] { --c: var(--sodium); opacity: 1; }
+  .continuum .em[data-active]::after { opacity: 1; }
+  @keyframes arrive {
+    from { transform: translateX(-2.5rem); }
+    to { transform: translateX(0); }
+  }
+
+  /* The calibrated axis: a tick on every band edge, a major tick under each line. */
+  .axis {
+    position: relative;
+    height: 2.5rem;
+    margin: 0;
+    border-top: 1px solid var(--rule-hi);
+    background-image: linear-gradient(to right, var(--rule-hi) 1px, transparent 1px);
+    background-size: calc(100% / 14) 5px;
+    background-repeat: repeat-x;
+    font-family: var(--condensed);
+    font-weight: 500;
+    font-size: 0.75rem;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--bone-3);
+  }
+  .axis span {
+    position: absolute;
+    top: 1rem;
+    left: var(--x);
+    transform: translateX(-50%);
     white-space: nowrap;
   }
-  .badge .dot { width: 5px; height: 5px; border-radius: 50%; background: currentColor; }
-  .badge--live { color: var(--live); }
-  .badge--live .dot { --pulse-spread: 6px; animation: pulse 2.4s ease-out infinite; }
-  .badge--beta { color: var(--beta); }
-
-  .node-desc {
-    margin: 9px 0 18px;
-    color: var(--muted);
-    font-size: 15.5px;
-    line-height: 1.55;
-    max-width: 72ch;
+  .axis span::before {
+    content: "";
+    position: absolute;
+    left: 50%;
+    top: -1rem;
+    width: 1px;
+    height: 0.625rem;
+    background: var(--hue);
   }
 
-  .node-path {
-    font-family: var(--font);
-    font-size: 13.5px;
-    letter-spacing: 0.01em;
-    color: var(--faint);
+  /* ---------- System plates ---------- */
+
+  .system {
+    position: relative;
+    margin-top: 2.5rem;
+    background: var(--plate);
+    border-top: 1px solid var(--hue);
+    padding: clamp(1.5rem, 3.6cqi, 2.5rem) clamp(1.25rem, 3.6cqi, 2.5rem) clamp(1.75rem, 4cqi, 2.75rem);
+    scroll-margin-top: 1.5rem;
+  }
+  .system[data-state="beta"] { border-top-style: dashed; }
+  .system + .system { margin-top: 1.5rem; }
+
+  /* The plate hangs from its line: the top rule runs back to the rail. */
+  .system::before {
+    content: "";
+    position: absolute;
+    top: -1px;
+    right: 100%;
+    width: var(--main-pad);
+    height: 1px;
+    background: var(--hue);
+    transition: background-color 240ms ease-out;
+  }
+  .system[data-state="beta"]::before {
+    background: repeating-linear-gradient(to right, var(--hue) 0 6px, transparent 6px 10px);
+  }
+  .system[data-active]::before { background: var(--sodium); }
+  .system[data-state="beta"][data-active]::before {
+    background: repeating-linear-gradient(to right, var(--sodium) 0 6px, transparent 6px 10px);
+  }
+
+  .sys-head {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    gap: 0.5rem 1.25rem;
+  }
+  .sys-head h2 {
+    margin: 0;
+    font-family: var(--condensed);
+    font-weight: 500;
+    font-size: clamp(2rem, 5.2cqi, 2.875rem);
+    line-height: 1;
+    letter-spacing: 0.005em;
+  }
+  .status {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.625rem;
+    font-family: var(--condensed);
+    font-weight: 500;
+    font-size: 0.875rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--bone-2);
+  }
+  .status::before {
+    content: "";
+    width: 1.75rem;
+    height: 1px;
+    background: var(--hue);
+  }
+  .status[data-state="beta"]::before {
+    background: repeating-linear-gradient(to right, var(--hue) 0 5px, transparent 5px 8px);
+  }
+
+  .thesis {
+    margin: 1rem 0 0;
+    max-width: 34ch;
+    font-family: var(--sans);
+    font-weight: 400;
+    font-size: clamp(1.1875rem, 2.7cqi, 1.4375rem);
+    line-height: 1.35;
+    color: var(--bone);
+    text-wrap: balance;
+  }
+
+  /* Actions: framed controls with one registered hairline, as on the plate. */
+  .actions {
     display: flex;
     flex-wrap: wrap;
     align-items: center;
-    gap: 6px 8px;
-    border-top: 1px solid var(--border);
-    padding-top: 14px;
-    transition: color 0.18s ease;
+    gap: 0.75rem 1rem;
+    margin: 1.5rem 0 0;
   }
-  .node:hover .node-path, .node:focus-visible .node-path { color: var(--accent); }
-  /* Label and arrow wrap as one unit, so narrow rows keep them together on the right. */
-  .node-path .launch {
-    margin-left: auto;
+  .act {
+    position: relative;
     display: inline-flex;
     align-items: center;
-    gap: 8px;
-    white-space: nowrap;
+    gap: 0.875rem;
+    min-height: 2.875rem;
+    padding: 0 1.125rem 0 1.375rem;
+    border: 1px solid var(--rule-hi);
+    font-family: var(--condensed);
+    font-weight: 600;
+    font-size: 0.9375rem;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    text-decoration: none;
+    color: var(--bone);
+    transition: border-color 160ms ease-out, background-color 160ms ease-out;
   }
-  .node-path .cta {
-    color: var(--accent);
-    opacity: 0;
-    transition: opacity 0.18s ease;
+  .act::before {
+    content: "";
+    position: absolute;
+    left: 0.5rem; top: 0.625rem; bottom: 0.625rem;
+    width: 1px;
+    background: var(--bone-3);
   }
-  .node:hover .cta, .node:focus-visible .cta { opacity: 1; }
-  .node-path .arrow { transition: transform 0.18s ease; }
-  .node:hover .arrow, .node:focus-visible .arrow { transform: translate(2px, -2px); }
+  .act svg { width: 0.875rem; height: 0.875rem; flex: none; transition: transform 200ms ease-out; }
+  /* Hover and press draw the plate's dashed inner frame. */
+  .act:hover { border-color: var(--bone-3); background: var(--plate-hi); outline: 1px dashed var(--rule-hi); outline-offset: -5px; }
+  .act:hover svg { transform: translate(2px, -2px); }
+  .act:active { background: var(--ground); outline: 1px dashed var(--bone-3); outline-offset: -5px; }
+  .act--launch { border-color: var(--bone-3); }
+  .act--launch::before { background: var(--sodium); }
+  .act--launch:hover { border-color: var(--bone-2); }
+  .act:focus-visible { outline: 1px dashed var(--sodium); outline-offset: 4px; }
+  .host {
+    flex-basis: 100%;
+    margin: 0;
+    font-size: 0.875rem;
+    color: var(--bone-3);
+    overflow-wrap: anywhere;
+  }
 
-  /* Touch screens have no hover, so the launch label is always shown. */
-  @media (hover: none) {
-    .node-path .cta { opacity: 1; }
+  /* Readings: each line is a verified result, hung on a hairline. */
+  .readings {
+    margin: 2rem 0 0;
+    padding: 0;
+    list-style: none;
+    border-top: 1px solid var(--rule);
+    max-width: 68ch;
+  }
+  .readings li {
+    display: grid;
+    grid-template-columns: 1px 1fr;
+    column-gap: 1rem;
+    padding: 0.8125rem 0;
+    border-bottom: 1px solid var(--rule);
+    color: var(--bone-2);
+    line-height: 1.5;
+  }
+  /* Each reading is marked by a vertical calibration tick in its system's hue. */
+  .readings li::before {
+    content: "";
+    align-self: start;
+    margin-top: 0.3em;
+    height: 0.9em;
+    background: var(--hue);
+  }
+  .readings b {
+    font-weight: 600;
+    color: var(--bone);
+  }
+  .flow svg {
+    display: inline-block;
+    width: 0.875em;
+    height: 0.875em;
+    margin: 0 0.3em;
+    vertical-align: -0.08em;
+    color: var(--bone-3);
   }
 
-  /* Cursor spotlight: a glow on the surface (::before) and on the border
-     ring (::after), positioned from --mx / --my set by the script below. */
-  @media (hover: hover) and (pointer: fine) {
-    .node {
-      position: relative;
-      isolation: isolate;
+  .next {
+    margin: 1.25rem 0 0;
+    display: flex;
+    align-items: baseline;
+    gap: 0.75rem;
+    color: var(--bone-2);
+    max-width: 68ch;
+  }
+  .next span:first-child {
+    flex: none;
+    font-family: var(--condensed);
+    font-weight: 600;
+    font-size: 0.875rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--bone);
+  }
+
+  .nb { white-space: nowrap; }
+
+  /* Wide plates: the claim and actions on the left, readings on the right. */
+  @container (min-width: 50rem) {
+    .system {
+      display: grid;
+      grid-template-columns: minmax(0, 5fr) minmax(0, 7fr);
+      column-gap: clamp(2rem, 5cqi, 4rem);
+      align-items: start;
     }
-    .node::before, .node::after {
-      content: "";
+    .readings { margin-top: 0.375rem; }
+    .thesis { max-width: none; }
+  }
+
+  /* The close: shown where the legend scrolls away. */
+  .close {
+    display: none;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 1rem 2.5rem;
+    margin-top: 3.5rem;
+    padding-top: 1.75rem;
+    border-top: 1px solid var(--rule-hi);
+  }
+  .close .owner-name { font-size: 1.5rem; }
+  .close .owner-role { margin-top: 0.375rem; }
+  .close .profiles { margin: 0; }
+  .close .scope-line {
+    flex-basis: 100%;
+    margin: 0;
+    font-size: 0.875rem;
+    color: var(--bone-3);
+  }
+
+  /* ---------- Narrow screens: the rail turns horizontal ---------- */
+
+  @media (max-width: 63.99rem) {
+    :root { --gutter: 1.5rem; }
+    html { scroll-padding-top: 4.5rem; }
+
+    .frame {
+      display: block;
+      padding: 0;
+    }
+
+    /* The legend dissolves so its nav can stick for the whole page. */
+    .legend { display: contents; }
+    .legend::after { content: none; }
+    .legend > .reg,
+    .scope { display: none; }
+    .owner { padding: 2.5rem var(--gutter) 0; }
+
+    .legend nav {
+      position: sticky;
+      top: 0;
+      z-index: 2;
+      margin-top: 1.25rem;
+      padding: 0 var(--gutter);
+      background: var(--ground);
+      border-bottom: 1px solid var(--rule-hi);
+    }
+    .index {
+      display: flex;
+      gap: 1.5rem;
+      margin: 0;
+    }
+    .index li { flex: 1; min-width: 0; }
+    .index a {
+      grid-template-columns: 1fr;
+      height: 3.5rem;
+      align-content: center;
+    }
+    .index .label { flex-direction: row; align-items: baseline; gap: 0.625rem; }
+    /* The segment becomes the line on the horizontal rail, in its hue at rest. */
+    .index .seg {
+      grid-column: 1;
+      grid-row: auto;
       position: absolute;
-      pointer-events: none;
-      border-radius: inherit;
-      opacity: 0;
-      transition: opacity 0.25s ease;
+      left: 0; right: 0; bottom: -1px;
+      transform-origin: left center;
     }
-    .node::before {
-      inset: 0;
-      z-index: -1;
-      background: radial-gradient(320px circle at var(--mx, 50%) var(--my, 50%),
-        rgba(77, 159, 255, 0.08), transparent 70%);
-    }
-    .node::after {
-      inset: -1px;
-      padding: 1px;
-      background: radial-gradient(220px circle at var(--mx, 50%) var(--my, 50%),
-        rgba(77, 159, 255, 0.55), transparent 70%);
-      -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
-      -webkit-mask-composite: xor;
-      mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
-      mask-composite: exclude;
-    }
-    .node:hover::before, .node:hover::after { opacity: 1; }
-  }
+    .index a[aria-current="true"] .seg { bottom: -2px; }
+    .index .seg .reg { display: none; }
 
-  footer {
-    border-top: 1px solid var(--border);
-    padding: 18px 24px;
-    text-align: center;
-    font-family: var(--font);
-    font-size: 12px;
-    letter-spacing: 0.06em;
-    color: var(--faint);
+    main { padding: 2.25rem var(--gutter) 3rem; }
+    .system { margin-left: calc(var(--gutter) * -1); margin-right: calc(var(--gutter) * -1); padding-left: var(--gutter); padding-right: var(--gutter); }
+    .system::before { content: none; }
+    .close { display: flex; }
   }
-
-  @keyframes pulse {
-    0%   { box-shadow: 0 0 0 0 rgba(63, 208, 127, 0.45); }
-    70%  { box-shadow: 0 0 0 var(--pulse-spread, 7px) rgba(63, 208, 127, 0); }
-    100% { box-shadow: 0 0 0 0 rgba(63, 208, 127, 0); }
-  }
-
-  /* Headline caret sweep (driven by the script below). The letter spans only
-     change colour, so line breaking is untouched; the dots and the caret live
-     in one aria-hidden overlay at the end of the headline. */
-  .lede { position: relative; }
-  .lede .ch.pending { color: transparent; }
-  .sweep { position: absolute; inset: 0; pointer-events: none; }
-  .sweep i {
-    position: absolute;
-    width: 0.16em;
-    height: 0.16em;
-    margin: -0.08em 0 0 -0.08em;
-    border-radius: 0.02em;
-    background: var(--faint);
-  }
-  .sweep b {
-    position: absolute;
-    width: 3px;
-    border-radius: 1px;
-    background: var(--accent);
-  }
-  .sweep b.end { animation: caretBlink 0.9s steps(1) 2, caretOut 0.3s ease 1.8s forwards; }
-  @keyframes caretBlink { 50% { opacity: 0; } }
-  @keyframes caretOut { to { opacity: 0; } }
 
   @media (prefers-reduced-motion: reduce) {
-    .mark .dot, .badge--live .dot { animation: none; }
-    .masthead, .lede, .sub, .node { animation: none; }
-    .node, .arrow, .node-path, .node::before, .node::after, .social a { transition: none; }
+    .index a[aria-current="true"] .seg,
+    .continuum .em { animation: none; }
+    .act, .act svg, .profiles a, .index a, .continuum .em, .continuum .em::after, .system::before { transition: none; }
   }
 </style>
 </head>
 <body>
-  <main class="wrap">
-    <header>
-      <div class="masthead">
-        <div class="mark"><span class="dot"></span>cloudsecuritypractice.com</div>
-        <nav class="social" aria-label="Profiles">
-          <a class="linkedin" href="https://www.linkedin.com/in/arnoldgcastro/" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn" title="LinkedIn">
-            <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true" focusable="false"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 0 1-2.063-2.065 2.064 2.064 0 1 1 2.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg>
-          </a>
-          <a class="github" href="https://github.com/arnoldcastro5000" target="_blank" rel="noopener noreferrer" aria-label="GitHub" title="GitHub">
-            <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true" focusable="false"><path d="M12 0C5.374 0 0 5.373 0 12c0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23A11.509 11.509 0 0 1 12 5.803c1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576C20.566 21.797 24 17.3 24 12c0-6.627-5.373-12-12-12z"/></svg>
-          </a>
-        </nav>
+  <div class="frame">
+    <header class="legend">
+      <i class="reg reg--top" aria-hidden="true"></i>
+      <div class="owner">
+        <p class="owner-name">Arnold Castro</p>
+        <p class="owner-role">Cloud Security Specialist</p>
+        <ul class="profiles">
+          <li>
+            <a href="https://www.linkedin.com/in/arnoldgcastro/" target="_blank" rel="noopener noreferrer">
+              <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true" focusable="false"><path d="M20.45 20.45h-3.55v-5.57c0-1.33-.03-3.04-1.85-3.04-1.86 0-2.14 1.45-2.14 2.94v5.67H9.35V9h3.41v1.56h.05c.48-.9 1.64-1.85 3.37-1.85 3.6 0 4.27 2.37 4.27 5.46v6.28zM5.34 7.43a2.06 2.06 0 1 1 0-4.13 2.06 2.06 0 0 1 0 4.13zM7.12 20.45H3.56V9h3.56v11.45zM22.23 0H1.77C.79 0 0 .77 0 1.73v20.54C0 23.23.79 24 1.77 24h20.45c.98 0 1.78-.77 1.78-1.73V1.73C24 .77 23.2 0 22.22 0z"/></svg>
+              LinkedIn<span class="sr"> (opens in a new tab)</span>
+            </a>
+          </li>
+          <li>
+            <a href="https://github.com/arnoldcastro5000" target="_blank" rel="noopener noreferrer">
+              <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true" focusable="false"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.3 3.44 9.8 8.21 11.39.6.11.79-.26.79-.58v-2.23c-3.34.73-4.03-1.42-4.03-1.42-.55-1.39-1.33-1.76-1.33-1.76-1.09-.75.08-.73.08-.73 1.2.08 1.84 1.24 1.84 1.24 1.07 1.83 2.81 1.3 3.49 1 .11-.78.42-1.31.76-1.6-2.67-.31-5.47-1.34-5.47-5.93 0-1.31.47-2.38 1.24-3.22-.12-.3-.54-1.52.12-3.18 0 0 1.01-.32 3.3 1.23a11.5 11.5 0 0 1 6 0c2.29-1.55 3.3-1.23 3.3-1.23.65 1.65.24 2.87.12 3.18.77.84 1.24 1.91 1.24 3.22 0 4.61-2.81 5.62-5.48 5.92.43.37.82 1.1.82 2.22v3.29c0 .32.19.69.8.58C20.57 21.8 24 17.3 24 12c0-6.63-5.37-12-12-12z"/></svg>
+              GitHub<span class="sr"> (opens in a new tab)</span>
+            </a>
+          </li>
+        </ul>
       </div>
-      <h1 class="lede">Cloud security proofs of concept</h1>
-      <p class="sub">AI-built, security-reviewed.</p>
+
+      <nav aria-label="Systems">
+        <ul class="index">
+          <li>
+            <a href="#prowler" data-sys="prowler" data-state="live" data-target="prowler" aria-current="true">
+              <span class="label"><span class="name">Prowler</span><span class="state">Live</span></span>
+              <span class="seg" aria-hidden="true"><i class="reg"></i></span>
+            </a>
+          </li>
+          <li>
+            <a href="#loonvault" data-sys="loonvault" data-state="beta" data-target="loonvault">
+              <span class="label"><span class="name">LoonVault</span><span class="state">Beta</span></span>
+              <span class="seg" aria-hidden="true"><i class="reg"></i></span>
+            </a>
+          </li>
+        </ul>
+      </nav>
+
+      <p class="scope"><i class="reg" aria-hidden="true"></i>No production data or customer traffic.</p>
+      <i class="reg reg--end" aria-hidden="true"></i>
     </header>
 
-    <nav class="nodes" aria-label="Environments">
-      <a class="node" style="--i: 0" href="https://prowler.cloudsecuritypractice.com">
-        <div class="node-top">
-          <span class="node-name">Prowler</span>
-          <span class="badge badge--live"><span class="dot"></span>live</span>
-        </div>
-        <p class="node-desc">A defense-in-depth project securing every layer of a real, running system: Prowler remediated all 19 findings across AWS, GCP, and Azure (verified by re-scan), the live dashboard runs 24/7 on Cloud Run reachable only through Cloudflare's CDN, proxy, and WAF, every change clears automated gates spanning supply-chain, SAST, secrets, IaC, and container scanning, and the AI tool that built it ran sandboxed with egress allowlisting. The supply-chain layer is the part worth noticing: it blocks malicious packages, not just vulnerable ones.</p>
-        <div class="node-path">
-          <span>prowler<wbr>.cloudsecuritypractice.com</span>
-          <span class="launch">
-            <span class="cta">Click to launch POC</span>
-            <span class="arrow" aria-hidden="true">&#8599;</span>
-          </span>
-        </div>
-      </a>
+    <main>
+      <section class="claim" aria-labelledby="claim-title">
+        <h1 id="claim-title"><span>AI<span class="hy">-</span>built.</span> <span>Security<span class="hy">-</span>reviewed.</span></h1>
+        <p class="standfirst">Cloud security proofs of concept</p>
 
-      <a class="node" style="--i: 1" href="https://loonvault.cloudsecuritypractice.com">
-        <div class="node-top">
-          <span class="node-name">LoonVault</span>
-          <span class="badge badge--beta"><span class="dot"></span>beta</span>
+        <div class="continuum" aria-hidden="true">
+          <i class="em" data-sys="prowler" data-line="prowler" data-state="live" data-active style="--x: calc(100% * 5 / 14); --d: 120ms"></i>
+          <i class="em" data-sys="loonvault" data-line="loonvault" data-state="beta" style="--x: calc(100% * 9 / 14); --d: 220ms"></i>
         </div>
-        <p class="node-desc">A secure cloud data platform mapped control-by-control to the OSFI B-13 cyber-risk framework, with a working STRIDE threat model: a least-privilege AWS stack in ca-central-1 fronted by Cloudflare (WAF, rate-limiting), with RDS IAM auth and no stored credentials, private no-NAT subnets, customer-managed encryption, a region-lock SCP defined as code, and org-wide CloudTrail. The full data path (API Gateway &rarr; authorizer &rarr; Lambda &rarr; RDS) is built and validated end-to-end. The centerpiece is policy-as-code: an OPA-on-plan gate runs 20 tests against every Terraform change before deploy, blocking open SSH, public buckets, or out-of-region resources, each rule tied to the OSFI principle it enforces so compliance evidence can't drift from the code. Next: detection-and-response, wiring Prowler and the remaining rules onto the same control map.</p>
-        <div class="node-path">
-          <span>loonvault<wbr>.cloudsecuritypractice.com</span>
-          <span class="launch">
-            <span class="cta">Click to launch POC</span>
-            <span class="arrow" aria-hidden="true">&#8599;</span>
-          </span>
-        </div>
-      </a>
-    </nav>
-  </main>
+        <p class="axis" aria-hidden="true">
+          <span data-sys="prowler" style="--x: calc(100% * 5 / 14)">Prowler</span>
+          <span data-sys="loonvault" style="--x: calc(100% * 9 / 14)">LoonVault</span>
+        </p>
+      </section>
 
-  <footer>no production data or customer traffic</footer>
+      <article class="system" id="prowler" data-sys="prowler" data-state="live" data-active aria-labelledby="prowler-title">
+        <div class="sys-main">
+          <div class="sys-head">
+            <h2 id="prowler-title">Prowler</h2>
+            <span class="status" data-state="live">Live</span>
+          </div>
+          <p class="thesis">Defense in depth on a live system across AWS, GCP, and Azure.</p>
+          <div class="actions">
+            <a class="act act--launch" href="https://prowler.cloudsecuritypractice.com">
+              Launch<span class="sr"> Prowler</span>
+              <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true" focusable="false"><path d="M4.5 11.5l7-7M5.5 4.5h6v6"/></svg>
+            </a>
+            <a class="act" href="https://github.com/arnoldcastro5000/prowler-cspm-demo">
+              Code<span class="sr"> for Prowler on GitHub</span>
+              <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true" focusable="false"><path d="M4.5 11.5l7-7M5.5 4.5h6v6"/></svg>
+            </a>
+            <p class="host">prowler.<wbr>cloudsecuritypractice.com</p>
+          </div>
+        </div>
+        <div class="sys-proof">
+          <ul class="readings">
+            <li><span><b>19/19</b> Prowler scan findings remediated, verified by <span class="nb">re-scan</span></span></li>
+            <li><span>Dashboard runs <b>24/7</b> on Cloud Run, reachable only through Cloudflare CDN, proxy, and WAF</span></li>
+            <li><span><b>5 CI gates</b> on every change: supply chain, SAST, secrets, IaC, containers</span></li>
+            <li><span>The <span class="nb">supply-chain</span> gate blocks <b>malicious</b> packages, not just vulnerable ones</span></li>
+            <li><span>The AI build agent ran <b>sandboxed</b>, with egress allowlisting</span></li>
+          </ul>
+        </div>
+      </article>
+
+      <article class="system" id="loonvault" data-sys="loonvault" data-state="beta" aria-labelledby="loonvault-title">
+        <div class="sys-main">
+          <div class="sys-head">
+            <h2 id="loonvault-title">LoonVault</h2>
+            <span class="status" data-state="beta">Beta</span>
+          </div>
+          <p class="thesis">A cloud data platform mapped control by control to <span class="nb">OSFI B-13</span>.</p>
+          <div class="actions">
+            <a class="act act--launch" href="https://loonvault.cloudsecuritypractice.com">
+              Launch<span class="sr"> LoonVault</span>
+              <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true" focusable="false"><path d="M4.5 11.5l7-7M5.5 4.5h6v6"/></svg>
+            </a>
+            <a class="act" href="https://github.com/arnoldcastro5000/loonvault">
+              Code<span class="sr"> for LoonVault on GitHub</span>
+              <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true" focusable="false"><path d="M4.5 11.5l7-7M5.5 4.5h6v6"/></svg>
+            </a>
+            <p class="host">loonvault.<wbr>cloudsecuritypractice.com</p>
+          </div>
+        </div>
+        <div class="sys-proof">
+          <ul class="readings">
+            <li><span><b>20 OPA tests</b> gate every Terraform plan, each rule tied to the OSFI principle it enforces</span></li>
+            <li><span>Blocks open SSH, public buckets, and <span class="nb">out-of-region</span> resources <b>before deploy</b></span></li>
+            <li><span><span class="nb">Least-privilege</span> AWS in <span class="nb">ca-central-1</span>, behind Cloudflare WAF and rate limiting</span></li>
+            <li><span>RDS IAM auth with <b>no stored credentials</b>, private <span class="nb">no-NAT</span> subnets, <span class="nb">customer-managed</span> encryption</span></li>
+            <li><span class="flow">Full data path validated end to end: API Gateway<svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true" focusable="false"><path d="M2 8h11M9.5 4.5L13 8l-3.5 3.5"/></svg><span class="sr">, then </span>authorizer<svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true" focusable="false"><path d="M2 8h11M9.5 4.5L13 8l-3.5 3.5"/></svg><span class="sr">, then </span>Lambda<svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true" focusable="false"><path d="M2 8h11M9.5 4.5L13 8l-3.5 3.5"/></svg><span class="sr">, then </span>RDS</span></li>
+            <li><span>STRIDE threat model, <span class="nb">region-lock</span> SCP as code, <span class="nb">org-wide</span> CloudTrail</span></li>
+            <li><span>The AI build agent ran <b>sandboxed</b>, with egress allowlisting</span></li>
+          </ul>
+          <p class="next"><span>Next</span><span>Detection and response, with Prowler on the same control map.</span></p>
+        </div>
+      </article>
+
+      <footer class="close">
+        <div>
+          <p class="owner-name">Arnold Castro</p>
+          <p class="owner-role">Cloud Security Specialist</p>
+        </div>
+        <ul class="profiles">
+          <li>
+            <a href="https://www.linkedin.com/in/arnoldgcastro/" target="_blank" rel="noopener noreferrer">
+              <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true" focusable="false"><path d="M20.45 20.45h-3.55v-5.57c0-1.33-.03-3.04-1.85-3.04-1.86 0-2.14 1.45-2.14 2.94v5.67H9.35V9h3.41v1.56h.05c.48-.9 1.64-1.85 3.37-1.85 3.6 0 4.27 2.37 4.27 5.46v6.28zM5.34 7.43a2.06 2.06 0 1 1 0-4.13 2.06 2.06 0 0 1 0 4.13zM7.12 20.45H3.56V9h3.56v11.45zM22.23 0H1.77C.79 0 0 .77 0 1.73v20.54C0 23.23.79 24 1.77 24h20.45c.98 0 1.78-.77 1.78-1.73V1.73C24 .77 23.2 0 22.22 0z"/></svg>
+              LinkedIn<span class="sr"> (opens in a new tab)</span>
+            </a>
+          </li>
+          <li>
+            <a href="https://github.com/arnoldcastro5000" target="_blank" rel="noopener noreferrer">
+              <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true" focusable="false"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.3 3.44 9.8 8.21 11.39.6.11.79-.26.79-.58v-2.23c-3.34.73-4.03-1.42-4.03-1.42-.55-1.39-1.33-1.76-1.33-1.76-1.09-.75.08-.73.08-.73 1.2.08 1.84 1.24 1.84 1.24 1.07 1.83 2.81 1.3 3.49 1 .11-.78.42-1.31.76-1.6-2.67-.31-5.47-1.34-5.47-5.93 0-1.31.47-2.38 1.24-3.22-.12-.3-.54-1.52.12-3.18 0 0 1.01-.32 3.3 1.23a11.5 11.5 0 0 1 6 0c2.29-1.55 3.3-1.23 3.3-1.23.65 1.65.24 2.87.12 3.18.77.84 1.24 1.91 1.24 3.22 0 4.61-2.81 5.62-5.48 5.92.43.37.82 1.1.82 2.22v3.29c0 .32.19.69.8.58C20.57 21.8 24 17.3 24 12c0-6.63-5.37-12-12-12z"/></svg>
+              GitHub<span class="sr"> (opens in a new tab)</span>
+            </a>
+          </li>
+        </ul>
+        <p class="scope-line">No production data or customer traffic.</p>
+      </footer>
+    </main>
+  </div>
 
   <script>
-    // Feed the pointer position to the card spotlight CSS.
-    for (const node of document.querySelectorAll(".node")) {
-      node.addEventListener("pointermove", (e) => {
-        const r = node.getBoundingClientRect();
-        node.style.setProperty("--mx", `${e.clientX - r.left}px`);
-        node.style.setProperty("--my", `${e.clientY - r.top}px`);
-      });
-    }
-
-    // Headline caret sweep: a caret reveals "proofs of concept" once on load,
-    // then the headline goes back to plain text. Without JS, or with reduced
-    // motion, the headline is plain text from the start.
     (() => {
-      if (matchMedia("(prefers-reduced-motion: reduce)").matches) return;
-      const lede = document.querySelector(".lede");
-      const text = lede.textContent;
-      const from = text.indexOf("proofs");
-      const start = 150, step = 50, caretLinger = 2100;
+      const legend = document.querySelector(".legend");
+      const links = [...document.querySelectorAll(".index a[data-target]")];
+      const lines = [...document.querySelectorAll(".continuum .em")];
+      const plates = links.map((a) => document.getElementById(a.dataset.target));
+      let current = "prowler";
 
-      lede.textContent = text.slice(0, from);
-      const chars = [];
-      for (const c of text.slice(from)) {
-        if (c === " ") { lede.append(" "); continue; }
-        const span = document.createElement("span");
-        span.className = "ch pending";
-        span.textContent = c;
-        lede.append(span);
-        chars.push(span);
-      }
+      // Register the rail ticks on the index lines, so every line lands on a tick.
+      const register = () => {
+        const seg = links[0].querySelector(".seg");
+        const rail = getComputedStyle(legend, "::after");
+        if (rail.content === "none") return;
+        const railTop = legend.getBoundingClientRect().top + parseFloat(rail.top);
+        const s = seg.getBoundingClientRect();
+        const y = s.top + s.height / 2 - railTop;
+        const pitch = parseFloat(getComputedStyle(legend).getPropertyValue("--pitch"));
+        legend.style.setProperty("--tick-y", `${(y % pitch + pitch) % pitch}px`);
+      };
+      document.fonts.ready.then(register);
+      addEventListener("resize", register);
 
-      const overlay = document.createElement("span");
-      overlay.className = "sweep";
-      overlay.setAttribute("aria-hidden", "true");
-      const dots = chars.map(() => overlay.appendChild(document.createElement("i")));
-      const caret = overlay.appendChild(document.createElement("b"));
-      lede.append(overlay);
-
-      // Place the dots on the pending letters and the caret before letter
-      // `next` (after the last letter once all are revealed).
-      const place = (next) => {
-        const box = lede.getBoundingClientRect();
-        const em = parseFloat(getComputedStyle(lede).fontSize);
-        chars.forEach((span, i) => {
-          span.classList.toggle("pending", i >= next);
-          dots[i].hidden = i < next;
-          if (i < next) return;
-          const r = span.getBoundingClientRect();
-          dots[i].style.left = `${r.left - box.left + r.width / 2}px`;
-          dots[i].style.top = `${r.top - box.top + r.height * 0.4}px`;
-        });
-        const done = next >= chars.length;
-        const r = chars[done ? chars.length - 1 : next].getBoundingClientRect();
-        caret.style.left = `${(done ? r.right + 2 : r.left - 2) - box.left}px`;
-        caret.style.top = `${r.top - box.top + 0.12 * em}px`;
-        caret.style.height = `${r.height - 0.16 * em}px`;
-        caret.classList.toggle("end", done);
+      // The plate in view becomes the active line on the rail, the continuum, and its own rule.
+      const activate = (id) => {
+        if (id === current) return;
+        current = id;
+        for (const a of links) {
+          if (a.dataset.target === id) a.setAttribute("aria-current", "true");
+          else a.removeAttribute("aria-current");
+        }
+        for (const el of lines) el.toggleAttribute("data-active", el.dataset.line === id);
+        for (const p of plates) p.toggleAttribute("data-active", p.id === id);
       };
 
-      place(0);
-      chars.forEach((_, i) => setTimeout(() => place(i + 1), start + (i + 1) * step));
-      setTimeout(() => { lede.textContent = text; }, start + chars.length * step + caretLinger);
+      const io = new IntersectionObserver((entries) => {
+        for (const e of entries) if (e.isIntersecting) activate(e.target.id);
+      }, { rootMargin: "-45% 0px -50% 0px" });
+      for (const p of plates) io.observe(p);
     })();
   </script>
 </body>
