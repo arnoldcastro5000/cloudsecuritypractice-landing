@@ -97,6 +97,13 @@
   .lede { animation-delay: 0.1s; }
   .sub  { animation-delay: 0.2s; }
 
+  /* Cards continue the stagger after the hero. "backwards" (not "both") so the
+     final keyframe does not hold transform and block the hover lift. */
+  .node {
+    animation: heroRise 0.6s cubic-bezier(0.16, 1, 0.3, 1) backwards;
+    animation-delay: calc(0.3s + var(--i, 0) * 0.1s);
+  }
+
   /* Destination list */
   .nodes {
     display: flex;
@@ -197,7 +204,7 @@
 
   @media (prefers-reduced-motion: reduce) {
     .mark .dot { animation: none; }
-    .mark, .lede, .sub { animation: none; }
+    .mark, .lede, .sub, .node { animation: none; }
     .node, .arrow, .node-path { transition: none; }
   }
 </style>
@@ -211,7 +218,7 @@
     </header>
 
     <nav class="nodes" aria-label="Environments">
-      <a class="node" href="https://prowler.cloudsecuritypractice.com">
+      <a class="node" style="--i: 0" href="https://prowler.cloudsecuritypractice.com">
         <div class="node-top">
           <span class="node-name">Prowler</span>
           <span class="badge"><span class="dot"></span>live</span>
@@ -224,7 +231,7 @@
         </div>
       </a>
 
-      <a class="node" href="https://loonvault.cloudsecuritypractice.com">
+      <a class="node" style="--i: 1" href="https://loonvault.cloudsecuritypractice.com">
         <div class="node-top">
           <span class="node-name">LoonVault</span>
           <span class="badge"><span class="dot"></span>beta</span>
