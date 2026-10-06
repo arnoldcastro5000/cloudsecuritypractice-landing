@@ -171,17 +171,24 @@
     letter-spacing: 0.01em;
     color: var(--faint);
     display: flex;
+    flex-wrap: wrap;
     align-items: center;
-    gap: 8px;
+    gap: 6px 8px;
     border-top: 1px solid var(--border);
     padding-top: 14px;
     transition: color 0.18s ease;
   }
   .node:hover .node-path, .node:focus-visible .node-path { color: var(--accent); }
-  .node-path .cta {
+  /* Label and arrow wrap as one unit, so narrow rows keep them together on the right. */
+  .node-path .launch {
     margin-left: auto;
-    color: var(--accent);
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
     white-space: nowrap;
+  }
+  .node-path .cta {
+    color: var(--accent);
     opacity: 0;
     transition: opacity 0.18s ease;
   }
@@ -267,9 +274,11 @@
         </div>
         <p class="node-desc">A defense-in-depth project securing every layer of a real, running system: Prowler remediated all 19 findings across AWS, GCP, and Azure (verified by re-scan), the live dashboard runs 24/7 on Cloud Run reachable only through Cloudflare's CDN, proxy, and WAF, every change clears automated gates spanning supply-chain, SAST, secrets, IaC, and container scanning, and the AI tool that built it ran sandboxed with egress allowlisting. The supply-chain layer is the part worth noticing: it blocks malicious packages, not just vulnerable ones.</p>
         <div class="node-path">
-          <span>prowler.cloudsecuritypractice.com</span>
-          <span class="cta">Click to launch POC</span>
-          <span class="arrow" aria-hidden="true">&#8599;</span>
+          <span>prowler<wbr>.cloudsecuritypractice.com</span>
+          <span class="launch">
+            <span class="cta">Click to launch POC</span>
+            <span class="arrow" aria-hidden="true">&#8599;</span>
+          </span>
         </div>
       </a>
 
@@ -280,9 +289,11 @@
         </div>
         <p class="node-desc">A secure cloud data platform mapped control-by-control to the OSFI B-13 cyber-risk framework, with a working STRIDE threat model: a least-privilege AWS stack in ca-central-1 fronted by Cloudflare (WAF, rate-limiting), with RDS IAM auth and no stored credentials, private no-NAT subnets, customer-managed encryption, a region-lock SCP defined as code, and org-wide CloudTrail. The full data path (API Gateway &rarr; authorizer &rarr; Lambda &rarr; RDS) is built and validated end-to-end. The centerpiece is policy-as-code: an OPA-on-plan gate runs 20 tests against every Terraform change before deploy, blocking open SSH, public buckets, or out-of-region resources, each rule tied to the OSFI principle it enforces so compliance evidence can't drift from the code. Next: detection-and-response, wiring Prowler and the remaining rules onto the same control map.</p>
         <div class="node-path">
-          <span>loonvault.cloudsecuritypractice.com</span>
-          <span class="cta">Click to launch POC</span>
-          <span class="arrow" aria-hidden="true">&#8599;</span>
+          <span>loonvault<wbr>.cloudsecuritypractice.com</span>
+          <span class="launch">
+            <span class="cta">Click to launch POC</span>
+            <span class="arrow" aria-hidden="true">&#8599;</span>
+          </span>
         </div>
       </a>
     </nav>
