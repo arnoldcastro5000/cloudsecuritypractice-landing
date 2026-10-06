@@ -194,6 +194,40 @@
     .node-path .cta { opacity: 1; }
   }
 
+  /* Cursor spotlight: a glow on the surface (::before) and on the border
+     ring (::after), positioned from --mx / --my set by the script below. */
+  @media (hover: hover) and (pointer: fine) {
+    .node {
+      position: relative;
+      isolation: isolate;
+    }
+    .node::before, .node::after {
+      content: "";
+      position: absolute;
+      pointer-events: none;
+      border-radius: inherit;
+      opacity: 0;
+      transition: opacity 0.25s ease;
+    }
+    .node::before {
+      inset: 0;
+      z-index: -1;
+      background: radial-gradient(320px circle at var(--mx, 50%) var(--my, 50%),
+        rgba(77, 159, 255, 0.08), transparent 70%);
+    }
+    .node::after {
+      inset: -1px;
+      padding: 1px;
+      background: radial-gradient(220px circle at var(--mx, 50%) var(--my, 50%),
+        rgba(77, 159, 255, 0.55), transparent 70%);
+      -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+      -webkit-mask-composite: xor;
+      mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+      mask-composite: exclude;
+    }
+    .node:hover::before, .node:hover::after { opacity: 1; }
+  }
+
   footer {
     border-top: 1px solid var(--border);
     padding: 18px 24px;
@@ -213,7 +247,7 @@
   @media (prefers-reduced-motion: reduce) {
     .mark .dot, .badge--live .dot { animation: none; }
     .mark, .lede, .sub, .node { animation: none; }
-    .node, .arrow, .node-path { transition: none; }
+    .node, .arrow, .node-path, .node::before, .node::after { transition: none; }
   }
 </style>
 </head>
@@ -255,5 +289,16 @@
   </main>
 
   <footer>no production data or customer traffic</footer>
+
+  <script>
+    // Feed the pointer position to the card spotlight CSS.
+    for (const node of document.querySelectorAll(".node")) {
+      node.addEventListener("pointermove", (e) => {
+        const r = node.getBoundingClientRect();
+        node.style.setProperty("--mx", `${e.clientX - r.left}px`);
+        node.style.setProperty("--my", `${e.clientY - r.top}px`);
+      });
+    }
+  </script>
 </body>
 </html>
