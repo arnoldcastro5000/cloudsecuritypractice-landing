@@ -589,6 +589,13 @@
     font-weight: 600;
     color: var(--bone);
   }
+  .readings a {
+    color: var(--bone);
+    text-decoration-color: var(--bone-3);
+    text-underline-offset: 0.2em;
+    transition: text-decoration-color 160ms ease-out;
+  }
+  .readings a:hover { text-decoration-color: var(--bone); }
   .flow svg {
     display: inline-block;
     width: 0.875em;
@@ -716,7 +723,7 @@
   @media (prefers-reduced-motion: reduce) {
     .index a[aria-current="true"] .seg,
     .continuum .em { animation: none; }
-    .act, .act svg, .profiles a, .index a, .continuum .em, .continuum .em::after, .system::before { transition: none; }
+    .act, .act svg, .profiles a, .readings a, .index a, .continuum .em, .continuum .em::after, .system::before { transition: none; }
   }
 </style>
 </head>
@@ -856,7 +863,7 @@
               <h3 id="csqv-title">CSQV Circle Packing</h3>
               <span class="status" data-state="source">Source</span>
             </div>
-            <p class="thesis">A C++ solver for the Packomania CSQV problem, written by Claude Code under human direction.</p>
+            <p class="thesis">A math optimization solver written by Claude Code under human direction, with results validated by an independent third party.</p>
             <div class="actions">
               <a class="act" href="https://github.com/arnoldcastro5000/csqv-circle-packing">
                 Code<span class="sr"> for CSQV Circle Packing on GitHub</span>
@@ -867,11 +874,12 @@
           </div>
           <div class="sys-proof">
             <ul class="readings">
-              <li><span>Packs circles of variable radii into a unit square to maximize the sum of the radii</span></li>
-              <li><span>Its packings held <b>published best-known records</b> on Packomania</span></li>
-              <li><span>Treats the AI-written code as <b>untrusted</b>: an independent validator re-checks each packing at zero tolerance</span></li>
-              <li><span>A <b>bit-identical gate</b> checks that a speed change leaves the output unchanged</span></li>
-              <li><span>Each discovery carries its own <b>provenance record</b></span></li>
+              <li><span><b><span class="nb">Third-party</span> validated:</b> <a href="https://www.packomania.com/csqv/csqv.html" target="_blank" rel="noopener noreferrer">Packomania<span class="sr"> (opens in a new tab)</span></a>, an independent public record site, accepted and published its results</span></li>
+              <li><span>Held published records, with <b class="nb">6 improvements</b> credited to Arnold Castro in <span class="nb">September 2026</span></span></li>
+              <li><span>The same record table cites <b class="nb">Google's AlphaEvolve</b> and university researchers</span></li>
+              <li><span>Treats <span class="nb">AI-written</span> code as <b>untrusted</b>: a separately written checker <span class="nb">re-tests</span> each result with zero tolerance for error</span></li>
+              <li><span>A <b>regression gate</b> confirms that a speed improvement leaves the results unchanged</span></li>
+              <li><span>Each result keeps an <b>audit trail</b> of how it was produced</span></li>
             </ul>
           </div>
         </article>
