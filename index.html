@@ -337,6 +337,7 @@
     font-size: clamp(1.125rem, 2.4cqi, 1.5rem);
     letter-spacing: 0.04em;
     color: var(--bone-2);
+    text-wrap: balance;
   }
 
   /* The continuum: a stepped charcoal-to-ash ramp with each system's line registered on a band edge. */
@@ -780,15 +781,17 @@
     <main>
       <section class="claim" aria-labelledby="claim-title">
         <h1 id="claim-title"><span>AI<span class="hy">-</span>built.</span> <span>Security<span class="hy">-</span>reviewed.</span></h1>
-        <p class="standfirst">Cloud security proofs of concept</p>
+        <p class="standfirst">Cloud security and AI engineering proofs of concept</p>
 
         <div class="continuum" aria-hidden="true">
-          <i class="em" data-sys="prowler" data-line="prowler" data-state="live" data-active style="--x: calc(100% * 5 / 14); --d: 120ms"></i>
-          <i class="em" data-sys="loonvault" data-line="loonvault" data-state="beta" style="--x: calc(100% * 9 / 14); --d: 220ms"></i>
+          <i class="em" data-sys="prowler" data-line="prowler" data-state="live" data-active style="--x: calc(100% * 3 / 14); --d: 120ms"></i>
+          <i class="em" data-sys="loonvault" data-line="loonvault" data-state="beta" style="--x: calc(100% * 7 / 14); --d: 220ms"></i>
+          <i class="em" data-sys="csqv" data-line="csqv" data-state="validated" style="--x: calc(100% * 11 / 14); --d: 320ms"></i>
         </div>
         <p class="axis" aria-hidden="true">
-          <span data-sys="prowler" style="--x: calc(100% * 5 / 14)">Prowler</span>
-          <span data-sys="loonvault" style="--x: calc(100% * 9 / 14)">LoonVault</span>
+          <span data-sys="prowler" style="--x: calc(100% * 3 / 14)">Prowler</span>
+          <span data-sys="loonvault" style="--x: calc(100% * 7 / 14)">LoonVault</span>
+          <span data-sys="csqv" style="--x: calc(100% * 11 / 14)">CSQV</span>
         </p>
       </section>
 
