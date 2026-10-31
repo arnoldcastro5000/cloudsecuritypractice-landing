@@ -59,6 +59,7 @@
     --sodium: #c9a95a;
     --line-green: #8ea283;
     --line-cyan: #7f9ba5;
+    --line-violet: #9a8fa8;
 
     /* Width ranks the family: extra condensed display, condensed labels, regular prose. */
     --display: "Sofia Sans Extra Condensed", "Arial Narrow", sans-serif;
@@ -114,6 +115,7 @@
   /* Each system owns one emission hue. */
   [data-sys="prowler"] { --hue: var(--line-green); }
   [data-sys="loonvault"] { --hue: var(--line-cyan); }
+  [data-sys="csqv"] { --hue: var(--line-violet); }
 
   /* A registration mark: a small ring that sits where two lines meet. */
   .reg {
@@ -424,6 +426,26 @@
   .system[data-state="beta"] { border-top-style: dashed; }
   .system + .system { margin-top: 1.5rem; }
 
+  /* A labeled group of plates outside the cloud security set.
+     The height lets the last plate reach the band that marks a plate as active on tall screens. */
+  .group {
+    min-height: 55vh;
+    min-height: 55svh;
+  }
+  .group-label {
+    margin: 3.5rem 0 1rem;
+    font-family: var(--condensed);
+    font-weight: 500;
+    font-size: 0.875rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--bone-2);
+  }
+  .group .system {
+    margin-top: 0;
+    scroll-margin-top: 3.5rem;
+  }
+
   /* The plate hangs from its line: the top rule runs back to the rail. */
   .system::before {
     content: "";
@@ -449,7 +471,7 @@
     align-items: baseline;
     gap: 0.5rem 1.25rem;
   }
-  .sys-head h2 {
+  .sys-head :is(h2, h3) {
     margin: 0;
     font-family: var(--condensed);
     font-weight: 500;
@@ -681,7 +703,14 @@
     main { padding: 2.25rem var(--gutter) 3rem; }
     .system { margin-left: calc(var(--gutter) * -1); margin-right: calc(var(--gutter) * -1); padding-left: var(--gutter); padding-right: var(--gutter); }
     .system::before { content: none; }
+    .group { min-height: 0; }
     .close { display: flex; }
+  }
+
+  /* Three labels do not fit in one row on a phone, so each name stacks over its state. */
+  @media (max-width: 30rem) {
+    .index { gap: 1rem; }
+    .index .label { flex-direction: column; gap: 0; }
   }
 
   @media (prefers-reduced-motion: reduce) {
@@ -725,6 +754,12 @@
           <li>
             <a href="#loonvault" data-sys="loonvault" data-state="beta" data-target="loonvault">
               <span class="label"><span class="name">LoonVault</span><span class="state">Beta</span></span>
+              <span class="seg" aria-hidden="true"><i class="reg"></i></span>
+            </a>
+          </li>
+          <li>
+            <a href="#csqv" data-sys="csqv" data-state="source" data-target="csqv">
+              <span class="label"><span class="name">CSQV</span><span class="state">Source</span></span>
               <span class="seg" aria-hidden="true"><i class="reg"></i></span>
             </a>
           </li>
@@ -812,6 +847,35 @@
           <p class="next"><span>Next</span><span>Detection and response, with Prowler on the same control map.</span></p>
         </div>
       </article>
+
+      <section class="group" aria-labelledby="ai-engineering">
+        <h2 class="group-label" id="ai-engineering">AI engineering</h2>
+        <article class="system" id="csqv" data-sys="csqv" data-state="source" aria-labelledby="csqv-title">
+          <div class="sys-main">
+            <div class="sys-head">
+              <h3 id="csqv-title">CSQV Circle Packing</h3>
+              <span class="status" data-state="source">Source</span>
+            </div>
+            <p class="thesis">A C++ solver for the Packomania CSQV problem, written by Claude Code under human direction.</p>
+            <div class="actions">
+              <a class="act" href="https://github.com/arnoldcastro5000/csqv-circle-packing">
+                Code<span class="sr"> for CSQV Circle Packing on GitHub</span>
+                <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true" focusable="false"><path d="M4.5 11.5l7-7M5.5 4.5h6v6"/></svg>
+              </a>
+              <p class="host">github.com/<wbr>arnoldcastro5000/<wbr><span class="nb">csqv-circle-packing</span></p>
+            </div>
+          </div>
+          <div class="sys-proof">
+            <ul class="readings">
+              <li><span>Packs circles of variable radii into a unit square to maximize the sum of the radii</span></li>
+              <li><span>Its packings held <b>published best-known records</b> on Packomania</span></li>
+              <li><span>Treats the AI-written code as <b>untrusted</b>: an independent validator re-checks each packing at zero tolerance</span></li>
+              <li><span>A <b>bit-identical gate</b> checks that a speed change leaves the output unchanged</span></li>
+              <li><span>Each discovery carries its own <b>provenance record</b></span></li>
+            </ul>
+          </div>
+        </article>
+      </section>
 
       <footer class="close">
         <div>
