@@ -418,22 +418,26 @@
 
   .system {
     position: relative;
-    margin-top: 2.5rem;
     background: var(--plate);
     border-top: 1px solid var(--hue);
     padding: clamp(1.5rem, 3.6cqi, 2.5rem) clamp(1.25rem, 3.6cqi, 2.5rem) clamp(1.75rem, 4cqi, 2.75rem);
-    scroll-margin-top: 1.5rem;
+    /* The room above the plate keeps its tags in view after an anchor jump. */
+    scroll-margin-top: 3.5rem;
   }
   .system[data-state="beta"] { border-top-style: dashed; }
-  .system + .system { margin-top: 1.5rem; }
 
-  /* A labeled group of plates outside the cloud security set.
-     The height lets the last plate reach the band that marks a plate as active on tall screens. */
-  .group {
+  /* The height lets the last plate reach the band that marks a plate as active on tall screens. */
+  .last-plate {
     min-height: 55vh;
     min-height: 55svh;
   }
-  .group-label {
+
+  /* The tags above a plate. */
+  .plate-tags {
+    display: flex;
+    flex-wrap: wrap;
+    column-gap: 1.2em;
+    overflow: hidden;
     margin: 3.5rem 0 1rem;
     font-family: var(--condensed);
     font-weight: 500;
@@ -442,9 +446,19 @@
     text-transform: uppercase;
     color: var(--bone-2);
   }
-  .group .system {
-    margin-top: 0;
-    scroll-margin-top: 3.5rem;
+  .claim + .plate-tags { margin-top: 2.5rem; }
+  .plate-tags > span {
+    position: relative;
+    white-space: nowrap;
+  }
+  /* The separator sits in the gap before a tag.
+     The label clips the separator of the first tag on a line, so no line starts or ends with a dot. */
+  .plate-tags > span + span::before {
+    content: "\00B7";
+    content: "\00B7" / "";
+    position: absolute;
+    right: 100%;
+    margin-right: 0.375em;
   }
 
   /* The plate hangs from its line: the top rule runs back to the rail. */
@@ -472,7 +486,7 @@
     align-items: baseline;
     gap: 0.5rem 1.25rem;
   }
-  .sys-head :is(h2, h3) {
+  .sys-head h2 {
     margin: 0;
     font-family: var(--condensed);
     font-weight: 500;
@@ -711,7 +725,7 @@
     main { padding: 2.25rem var(--gutter) 3rem; }
     .system { margin-left: calc(var(--gutter) * -1); margin-right: calc(var(--gutter) * -1); padding-left: var(--gutter); padding-right: var(--gutter); }
     .system::before { content: none; }
-    .group { min-height: 0; }
+    .last-plate { min-height: 0; }
     .close { display: flex; }
   }
 
@@ -795,6 +809,7 @@
         </p>
       </section>
 
+      <p class="plate-tags"><span>CSPM<span class="sr">, </span></span><span>Multi-cloud<span class="sr">, </span></span><span>Supply-chain</span></p>
       <article class="system" id="prowler" data-sys="prowler" data-state="live" data-active aria-labelledby="prowler-title">
         <div class="sys-main">
           <div class="sys-head">
@@ -825,6 +840,7 @@
         </div>
       </article>
 
+      <p class="plate-tags"><span>OSFI B-13<span class="sr">, </span></span><span>AWS<span class="sr">, </span></span><span>Policy as code</span></p>
       <article class="system" id="loonvault" data-sys="loonvault" data-state="beta" aria-labelledby="loonvault-title">
         <div class="sys-main">
           <div class="sys-head">
@@ -858,12 +874,12 @@
         </div>
       </article>
 
-      <section class="group" aria-labelledby="ai-engineering">
-        <h2 class="group-label" id="ai-engineering">AI engineering</h2>
+      <div class="last-plate">
+        <p class="plate-tags"><span>Math<span class="sr">, </span></span><span>Optimization<span class="sr">, </span></span><span>Published records</span></p>
         <article class="system" id="csqv" data-sys="csqv" data-state="validated" aria-labelledby="csqv-title">
           <div class="sys-main">
             <div class="sys-head">
-              <h3 id="csqv-title">CSQV Circle Packing</h3>
+              <h2 id="csqv-title">CSQV Circle Packing</h2>
               <span class="status" data-state="validated">Validated</span>
             </div>
             <p class="thesis">A math optimization solver written by Claude Code under human direction, with results validated by an independent third party.</p>
@@ -886,7 +902,7 @@
             </ul>
           </div>
         </article>
-      </section>
+      </div>
 
       <footer class="close">
         <div>
