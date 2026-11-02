@@ -9,7 +9,7 @@
 <meta property="og:type" content="website" />
 <meta property="og:url" content="https://cloudsecuritypractice.com/" />
 <meta property="og:title" content="Arnold Castro · Cloud security proofs of concept" />
-<meta property="og:description" content="AI-built, security-reviewed. Live cloud security systems with verified results: Prowler and LoonVault." />
+<meta property="og:description" content="AI-built, security-reviewed. Cloud security and AI engineering proofs of concept: Prowler, LoonVault, CSQV, and Understand Greenstand." />
 <meta name="twitter:card" content="summary" />
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' fill='%23131312'/%3E%3Cpath d='M9 4v24' stroke='%238a857a' stroke-width='1.5'/%3E%3Cpath d='M19 6v20M22 6v20' stroke='%23c9a95a' stroke-width='1.5'/%3E%3C/svg%3E" />
 <link rel="preload" href="fonts/sofia-sans-extra-condensed-latin-wght-normal.woff2" as="font" type="font/woff2" crossorigin />
@@ -60,6 +60,7 @@
     --line-green: #8ea283;
     --line-cyan: #7f9ba5;
     --line-violet: #9a8fa8;
+    --line-rose: #ad8a84;
 
     /* Width ranks the family: extra condensed display, condensed labels, regular prose. */
     --display: "Sofia Sans Extra Condensed", "Arial Narrow", sans-serif;
@@ -116,6 +117,7 @@
   [data-sys="prowler"] { --hue: var(--line-green); }
   [data-sys="loonvault"] { --hue: var(--line-cyan); }
   [data-sys="csqv"] { --hue: var(--line-violet); }
+  [data-sys="greenstand"] { --hue: var(--line-rose); }
 
   /* A registration mark: a small ring that sits where two lines meet. */
   .reg {
@@ -729,10 +731,23 @@
     .close { display: flex; }
   }
 
-  /* Three labels do not fit in one row on a phone, so each name stacks over its state. */
-  @media (max-width: 30rem) {
-    .index { gap: 1rem; }
+  /* Four labels do not fit in one row on a phone, so each name stacks over its state.
+     Each item takes the width of its text, and the free width goes to the gaps. */
+  @media (max-width: 40rem) {
+    .index { gap: 0.5rem; justify-content: space-between; }
+    .index li { flex: none; }
     .index .label { flex-direction: column; gap: 0; }
+  }
+
+  /* Tighter axis labels keep the outer names clear of the screen edge on a phone. */
+  @media (max-width: 30rem) {
+    .axis { letter-spacing: 0.1em; }
+  }
+
+  /* Tighter nav labels keep the four names inside the gutters on the narrowest phones. */
+  @media (max-width: 22rem) {
+    .index .name { font-size: 1.0625rem; letter-spacing: 0; }
+    .index .state { letter-spacing: 0.1em; }
   }
 
   @media (prefers-reduced-motion: reduce) {
@@ -785,6 +800,12 @@
               <span class="seg" aria-hidden="true"><i class="reg"></i></span>
             </a>
           </li>
+          <li>
+            <a href="#greenstand" data-sys="greenstand" data-state="live" data-target="greenstand">
+              <span class="label"><span class="name">Greenstand</span><span class="state">Live</span></span>
+              <span class="seg" aria-hidden="true"><i class="reg"></i></span>
+            </a>
+          </li>
         </ul>
       </nav>
 
@@ -798,14 +819,16 @@
         <p class="standfirst">Cloud security and AI engineering proofs of concept</p>
 
         <div class="continuum" aria-hidden="true">
-          <i class="em" data-sys="prowler" data-line="prowler" data-state="live" data-active style="--x: calc(100% * 3 / 14); --d: 120ms"></i>
-          <i class="em" data-sys="loonvault" data-line="loonvault" data-state="beta" style="--x: calc(100% * 7 / 14); --d: 220ms"></i>
-          <i class="em" data-sys="csqv" data-line="csqv" data-state="validated" style="--x: calc(100% * 11 / 14); --d: 320ms"></i>
+          <i class="em" data-sys="prowler" data-line="prowler" data-state="live" data-active style="--x: calc(100% * 1 / 14); --d: 120ms"></i>
+          <i class="em" data-sys="loonvault" data-line="loonvault" data-state="beta" style="--x: calc(100% * 5 / 14); --d: 220ms"></i>
+          <i class="em" data-sys="csqv" data-line="csqv" data-state="validated" style="--x: calc(100% * 9 / 14); --d: 320ms"></i>
+          <i class="em" data-sys="greenstand" data-line="greenstand" data-state="live" style="--x: calc(100% * 13 / 14); --d: 420ms"></i>
         </div>
         <p class="axis" aria-hidden="true">
-          <span data-sys="prowler" style="--x: calc(100% * 3 / 14)">Prowler</span>
-          <span data-sys="loonvault" style="--x: calc(100% * 7 / 14)">LoonVault</span>
-          <span data-sys="csqv" style="--x: calc(100% * 11 / 14)">CSQV</span>
+          <span data-sys="prowler" style="--x: calc(100% * 1 / 14)">Prowler</span>
+          <span data-sys="loonvault" style="--x: calc(100% * 5 / 14)">LoonVault</span>
+          <span data-sys="csqv" style="--x: calc(100% * 9 / 14)">CSQV</span>
+          <span data-sys="greenstand" style="--x: calc(100% * 13 / 14)">Greenstand</span>
         </p>
       </section>
 
@@ -874,31 +897,62 @@
         </div>
       </article>
 
+      <p class="plate-tags"><span>Math<span class="sr">, </span></span><span>Optimization<span class="sr">, </span></span><span>Published records</span></p>
+      <article class="system" id="csqv" data-sys="csqv" data-state="validated" aria-labelledby="csqv-title">
+        <div class="sys-main">
+          <div class="sys-head">
+            <h2 id="csqv-title">CSQV Circle Packing</h2>
+            <span class="status" data-state="validated">Validated</span>
+          </div>
+          <p class="thesis">A math optimization solver written by Claude Code under human direction, with results validated by an independent third party.</p>
+          <div class="actions">
+            <a class="act" href="https://github.com/arnoldcastro5000/csqv-circle-packing">
+              Code<span class="sr"> for CSQV Circle Packing on GitHub</span>
+              <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true" focusable="false"><path d="M4.5 11.5l7-7M5.5 4.5h6v6"/></svg>
+            </a>
+            <p class="host">github.com/<wbr>arnoldcastro5000/<wbr><span class="nb">csqv-circle-packing</span></p>
+          </div>
+        </div>
+        <div class="sys-proof">
+          <ul class="readings">
+            <li><span><b><span class="nb">Third-party</span> validated:</b> <a href="https://www.packomania.com/csqv/csqv.html" target="_blank" rel="noopener noreferrer">Packomania<span class="sr"> (opens in a new tab)</span></a>, an independent public record site, accepted and published its results</span></li>
+            <li><span>Held published records, with <b class="nb">6 improvements</b> credited to Arnold Castro in <span class="nb">September 2026</span></span></li>
+            <li><span>The same record table cites <b class="nb">Google's AlphaEvolve</b> and university researchers</span></li>
+            <li><span>Treats <span class="nb">AI-written</span> code as <b>untrusted</b>: a separately written checker <span class="nb">re-tests</span> each result with zero tolerance for error</span></li>
+            <li><span>A <b>regression gate</b> confirms that a speed improvement leaves the results unchanged</span></li>
+            <li><span>Each result keeps an <b>audit trail</b> of how it was produced</span></li>
+          </ul>
+        </div>
+      </article>
+
       <div class="last-plate">
-        <p class="plate-tags"><span>Math<span class="sr">, </span></span><span>Optimization<span class="sr">, </span></span><span>Published records</span></p>
-        <article class="system" id="csqv" data-sys="csqv" data-state="validated" aria-labelledby="csqv-title">
+        <p class="plate-tags"><span>Documentation<span class="sr">, </span></span><span>Nonprofit<span class="sr">, </span></span><span>Open source</span></p>
+        <article class="system" id="greenstand" data-sys="greenstand" data-state="live" aria-labelledby="greenstand-title">
           <div class="sys-main">
             <div class="sys-head">
-              <h2 id="csqv-title">CSQV Circle Packing</h2>
-              <span class="status" data-state="validated">Validated</span>
+              <h2 id="greenstand-title">Understand Greenstand</h2>
+              <span class="status" data-state="live">Live</span>
             </div>
-            <p class="thesis">A math optimization solver written by Claude Code under human direction, with results validated by an independent third party.</p>
+            <p class="thesis"><span class="nb">Plain-language</span> documentation that helps new volunteers understand a nonprofit's <span class="nb">tree-tracking</span> platform.</p>
             <div class="actions">
-              <a class="act" href="https://github.com/arnoldcastro5000/csqv-circle-packing">
-                Code<span class="sr"> for CSQV Circle Packing on GitHub</span>
+              <a class="act act--launch" href="https://arnoldcastro5000.github.io/understand-greenstand/">
+                Launch<span class="sr"> Understand Greenstand</span>
                 <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true" focusable="false"><path d="M4.5 11.5l7-7M5.5 4.5h6v6"/></svg>
               </a>
-              <p class="host">github.com/<wbr>arnoldcastro5000/<wbr><span class="nb">csqv-circle-packing</span></p>
+              <a class="act" href="https://github.com/arnoldcastro5000/understand-greenstand">
+                Code<span class="sr"> for Understand Greenstand on GitHub</span>
+                <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true" focusable="false"><path d="M4.5 11.5l7-7M5.5 4.5h6v6"/></svg>
+              </a>
+              <p class="host">arnoldcastro5000.<wbr>github.io/<wbr><span class="nb">understand-greenstand</span></p>
             </div>
           </div>
           <div class="sys-proof">
             <ul class="readings">
-              <li><span><b><span class="nb">Third-party</span> validated:</b> <a href="https://www.packomania.com/csqv/csqv.html" target="_blank" rel="noopener noreferrer">Packomania<span class="sr"> (opens in a new tab)</span></a>, an independent public record site, accepted and published its results</span></li>
-              <li><span>Held published records, with <b class="nb">6 improvements</b> credited to Arnold Castro in <span class="nb">September 2026</span></span></li>
-              <li><span>The same record table cites <b class="nb">Google's AlphaEvolve</b> and university researchers</span></li>
-              <li><span>Treats <span class="nb">AI-written</span> code as <b>untrusted</b>: a separately written checker <span class="nb">re-tests</span> each result with zero tolerance for error</span></li>
-              <li><span>A <b>regression gate</b> confirms that a speed improvement leaves the results unchanged</span></li>
-              <li><span>Each result keeps an <b>audit trail</b> of how it was produced</span></li>
+              <li><span>A <b class="nb">machine-built</b> site that documents 15 repositories at Greenstand, an <span class="nb">open-source</span> nonprofit platform that rewards tree growers</span></li>
+              <li><span>Turns <b class="nb">3,415 files</b> into interactive maps, onboarding guides, and a glossary of 277 business terms</span></li>
+              <li><span>AI drafts the docs, then <b>a person <span class="nb">re-checks</span></b> the system maps, where each link cites its source file</span></li>
+              <li><span>Public by design: <b class="nb">2 secret scanners</b> check the full history on every change, and a guard blocks private project names</span></li>
+              <li><span>The author contributes directly to Greenstand as Cloud Lead, with <b class="nb">26 pull requests</b></span></li>
             </ul>
           </div>
         </article>
