@@ -9,7 +9,7 @@
 <meta property="og:type" content="website" />
 <meta property="og:url" content="https://cloudsecuritypractice.com/" />
 <meta property="og:title" content="Arnold Castro · Cloud security projects" />
-<meta property="og:description" content="AI-built, security-reviewed. Cloud security and AI engineering projects: Prowler, LoonVault, CSQV, and Understand Greenstand." />
+<meta property="og:description" content="AI-built, security-reviewed. Cloud security and AI engineering projects: Understand Greenstand, CSQV, LoonVault, and Prowler." />
 <meta name="twitter:card" content="summary" />
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' fill='%23131312'/%3E%3Cpath d='M9 4v24' stroke='%238a857a' stroke-width='1.5'/%3E%3Cpath d='M19 6v20M22 6v20' stroke='%23c9a95a' stroke-width='1.5'/%3E%3C/svg%3E" />
 <link rel="preload" href="fonts/sofia-sans-extra-condensed-latin-wght-normal.woff2" as="font" type="font/woff2" crossorigin />
@@ -248,13 +248,21 @@
     font-size: 1.125rem;
     letter-spacing: 0.02em;
   }
-  .index .state {
+  /* The state and the month of the last work share one line. */
+  .index .meta {
+    display: flex;
     font-family: var(--condensed);
     font-size: 0.75rem;
     font-weight: 500;
     letter-spacing: 0.18em;
     text-transform: uppercase;
     color: var(--bone-3);
+    white-space: nowrap;
+  }
+  .index .date::before {
+    content: "\00B7";
+    content: "\00B7" / "";
+    margin: 0 0.3em;
   }
   .index .seg {
     position: relative;
@@ -706,13 +714,13 @@
       gap: 1.5rem;
       margin: 0;
     }
-    .index li { flex: 1; min-width: 0; }
+    /* The tabs share the width equally, but a tab never gets narrower than its label. */
+    .index li { flex: 1; min-width: max-content; }
     .index a {
       grid-template-columns: 1fr;
       height: 3.5rem;
       align-content: center;
     }
-    .index .label { flex-direction: row; align-items: baseline; gap: 0.625rem; }
     /* The segment becomes the line on the horizontal rail, in its hue at rest. */
     .index .seg {
       grid-column: 1;
@@ -731,12 +739,16 @@
     .close { display: flex; }
   }
 
-  /* Four labels do not fit in one row on a phone, so each name stacks over its state.
-     Each item takes the width of its text, and the free width goes to the gaps. */
+  /* Four labels do not fit in one row on a phone, so each state stacks over its month.
+     Each item takes the width of its text, and the free width goes to the gaps.
+     The taller bar holds the third line, and the scroll padding grows with it. */
   @media (max-width: 40rem) {
+    html { scroll-padding-top: 5rem; }
+    .index a { height: 4rem; }
     .index { gap: 0.5rem; justify-content: space-between; }
     .index li { flex: none; }
-    .index .label { flex-direction: column; gap: 0; }
+    .index .meta { flex-direction: column; }
+    .index .date::before { content: none; }
   }
 
   /* Tighter axis labels keep the outer names clear of the screen edge on a phone. */
@@ -747,7 +759,7 @@
   /* Tighter nav labels keep the four names inside the gutters on the narrowest phones. */
   @media (max-width: 22rem) {
     .index .name { font-size: 1.0625rem; letter-spacing: 0; }
-    .index .state { letter-spacing: 0.1em; }
+    .index .meta { letter-spacing: 0.1em; }
   }
 
   @media (prefers-reduced-motion: reduce) {
@@ -783,26 +795,26 @@
       <nav aria-label="Systems">
         <ul class="index">
           <li>
-            <a href="#prowler" data-sys="prowler" data-state="live" data-target="prowler" aria-current="true">
-              <span class="label"><span class="name">Prowler</span><span class="state">Live</span></span>
-              <span class="seg" aria-hidden="true"><i class="reg"></i></span>
-            </a>
-          </li>
-          <li>
-            <a href="#loonvault" data-sys="loonvault" data-state="beta" data-target="loonvault">
-              <span class="label"><span class="name">LoonVault</span><span class="state">Beta</span></span>
+            <a href="#greenstand" data-sys="greenstand" data-state="live" data-target="greenstand" aria-current="true">
+              <span class="label"><span class="name">Greenstand</span><span class="meta"><span class="state">Live</span><time class="date" datetime="2026-11">Nov 2026</time></span></span>
               <span class="seg" aria-hidden="true"><i class="reg"></i></span>
             </a>
           </li>
           <li>
             <a href="#csqv" data-sys="csqv" data-state="validated" data-target="csqv">
-              <span class="label"><span class="name">CSQV</span><span class="state">Validated</span></span>
+              <span class="label"><span class="name">CSQV</span><span class="meta"><span class="state">Validated</span><time class="date" datetime="2026-09">Sep 2026</time></span></span>
               <span class="seg" aria-hidden="true"><i class="reg"></i></span>
             </a>
           </li>
           <li>
-            <a href="#greenstand" data-sys="greenstand" data-state="live" data-target="greenstand">
-              <span class="label"><span class="name">Greenstand</span><span class="state">Live</span></span>
+            <a href="#loonvault" data-sys="loonvault" data-state="beta" data-target="loonvault">
+              <span class="label"><span class="name">LoonVault</span><span class="meta"><span class="state">Beta</span><time class="date" datetime="2026-07">Jul 2026</time></span></span>
+              <span class="seg" aria-hidden="true"><i class="reg"></i></span>
+            </a>
+          </li>
+          <li>
+            <a href="#prowler" data-sys="prowler" data-state="live" data-target="prowler">
+              <span class="label"><span class="name">Prowler</span><span class="meta"><span class="state">Live</span><time class="date" datetime="2026-06">Jun 2026</time></span></span>
               <span class="seg" aria-hidden="true"><i class="reg"></i></span>
             </a>
           </li>
@@ -819,46 +831,74 @@
         <p class="standfirst">Cloud security and AI engineering projects</p>
 
         <div class="continuum" aria-hidden="true">
-          <i class="em" data-sys="prowler" data-line="prowler" data-state="live" data-active style="--x: calc(100% * 1 / 14); --d: 120ms"></i>
-          <i class="em" data-sys="loonvault" data-line="loonvault" data-state="beta" style="--x: calc(100% * 5 / 14); --d: 220ms"></i>
-          <i class="em" data-sys="csqv" data-line="csqv" data-state="validated" style="--x: calc(100% * 9 / 14); --d: 320ms"></i>
-          <i class="em" data-sys="greenstand" data-line="greenstand" data-state="live" style="--x: calc(100% * 13 / 14); --d: 420ms"></i>
+          <i class="em" data-sys="greenstand" data-line="greenstand" data-state="live" data-active style="--x: calc(100% * 1 / 14); --d: 120ms"></i>
+          <i class="em" data-sys="csqv" data-line="csqv" data-state="validated" style="--x: calc(100% * 5 / 14); --d: 220ms"></i>
+          <i class="em" data-sys="loonvault" data-line="loonvault" data-state="beta" style="--x: calc(100% * 9 / 14); --d: 320ms"></i>
+          <i class="em" data-sys="prowler" data-line="prowler" data-state="live" style="--x: calc(100% * 13 / 14); --d: 420ms"></i>
         </div>
         <p class="axis" aria-hidden="true">
-          <span data-sys="prowler" style="--x: calc(100% * 1 / 14)">Prowler</span>
-          <span data-sys="loonvault" style="--x: calc(100% * 5 / 14)">LoonVault</span>
-          <span data-sys="csqv" style="--x: calc(100% * 9 / 14)">CSQV</span>
-          <span data-sys="greenstand" style="--x: calc(100% * 13 / 14)">Greenstand</span>
+          <span data-sys="greenstand" style="--x: calc(100% * 1 / 14)">Greenstand</span>
+          <span data-sys="csqv" style="--x: calc(100% * 5 / 14)">CSQV</span>
+          <span data-sys="loonvault" style="--x: calc(100% * 9 / 14)">LoonVault</span>
+          <span data-sys="prowler" style="--x: calc(100% * 13 / 14)">Prowler</span>
         </p>
       </section>
 
-      <p class="plate-tags"><span>CSPM<span class="sr">, </span></span><span>Multi-cloud<span class="sr">, </span></span><span>Supply-chain</span></p>
-      <article class="system" id="prowler" data-sys="prowler" data-state="live" data-active aria-labelledby="prowler-title">
+      <p class="plate-tags"><span>Documentation<span class="sr">, </span></span><span>Nonprofit<span class="sr">, </span></span><span>Open source</span></p>
+      <article class="system" id="greenstand" data-sys="greenstand" data-state="live" data-active aria-labelledby="greenstand-title">
         <div class="sys-main">
           <div class="sys-head">
-            <h2 id="prowler-title">Prowler</h2>
+            <h2 id="greenstand-title">Understand Greenstand</h2>
             <span class="status" data-state="live">Live</span>
           </div>
-          <p class="thesis">Defense in depth on a live system across AWS, GCP, and Azure.</p>
+          <p class="thesis"><span class="nb">Plain-language</span> documentation that helps new volunteers understand a nonprofit's <span class="nb">tree-tracking</span> platform.</p>
           <div class="actions">
-            <a class="act act--launch" href="https://prowler.cloudsecuritypractice.com">
-              Launch<span class="sr"> Prowler</span>
+            <a class="act act--launch" href="https://greenstand.github.io/greenstand-documentation/">
+              Launch<span class="sr"> Understand Greenstand</span>
               <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true" focusable="false"><path d="M4.5 11.5l7-7M5.5 4.5h6v6"/></svg>
             </a>
-            <a class="act" href="https://github.com/arnoldcastro5000/prowler-cspm-demo">
-              Code<span class="sr"> for Prowler on GitHub</span>
+            <a class="act" href="https://github.com/Greenstand/greenstand-documentation">
+              Code<span class="sr"> for Understand Greenstand on GitHub</span>
               <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true" focusable="false"><path d="M4.5 11.5l7-7M5.5 4.5h6v6"/></svg>
             </a>
-            <p class="host">prowler.<wbr>cloudsecuritypractice.com</p>
+            <p class="host">greenstand.<wbr>github.io/<wbr><span class="nb">greenstand-documentation</span></p>
           </div>
         </div>
         <div class="sys-proof">
           <ul class="readings">
-            <li><span><b>19/19</b> Prowler scan findings remediated, verified by <span class="nb">re-scan</span></span></li>
-            <li><span>Dashboard runs <b>24/7</b> on Cloud Run, reachable only through Cloudflare CDN, proxy, and WAF</span></li>
-            <li><span><b>5 CI gates</b> on every change: supply chain, SAST, secrets, IaC, containers</span></li>
-            <li><span>The <span class="nb">supply-chain</span> gate blocks <b>malicious</b> packages, not just vulnerable ones</span></li>
-            <li><span>The AI build agent ran <b>sandboxed</b>, with egress allowlisting</span></li>
+            <li><span>A <b class="nb">machine-built</b> site that documents 15 repositories at Greenstand, an <span class="nb">open-source</span> nonprofit platform that rewards tree growers</span></li>
+            <li><span>Turns <b class="nb">3,415 files</b> into interactive maps, onboarding guides, and a glossary of 277 business terms</span></li>
+            <li><span>AI drafts the docs, then <b>a person <span class="nb">re-checks</span></b> the system maps, where each link cites its source file</span></li>
+            <li><span>Public by design: <b class="nb">2 secret scanners</b> check the full history on every change, and a guard blocks private project names</span></li>
+            <li><span>The author contributes directly to Greenstand as Cloud Lead, with <b class="nb">26 pull requests</b></span></li>
+          </ul>
+        </div>
+      </article>
+
+      <p class="plate-tags"><span>Math<span class="sr">, </span></span><span>Optimization<span class="sr">, </span></span><span>Published records</span></p>
+      <article class="system" id="csqv" data-sys="csqv" data-state="validated" aria-labelledby="csqv-title">
+        <div class="sys-main">
+          <div class="sys-head">
+            <h2 id="csqv-title">CSQV Circle Packing</h2>
+            <span class="status" data-state="validated">Validated</span>
+          </div>
+          <p class="thesis">A math optimization solver written by Claude Code under human direction, with results validated by an independent third party.</p>
+          <div class="actions">
+            <a class="act" href="https://github.com/arnoldcastro5000/csqv-circle-packing">
+              Code<span class="sr"> for CSQV Circle Packing on GitHub</span>
+              <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true" focusable="false"><path d="M4.5 11.5l7-7M5.5 4.5h6v6"/></svg>
+            </a>
+            <p class="host">github.com/<wbr>arnoldcastro5000/<wbr><span class="nb">csqv-circle-packing</span></p>
+          </div>
+        </div>
+        <div class="sys-proof">
+          <ul class="readings">
+            <li><span><b><span class="nb">Third-party</span> validated:</b> <a href="https://www.packomania.com/csqv/csqv.html" target="_blank" rel="noopener noreferrer">Packomania<span class="sr"> (opens in a new tab)</span></a>, an independent public record site, accepted and published its results</span></li>
+            <li><span>Held published records, with <b class="nb">6 improvements</b> credited to Arnold Castro in <span class="nb">September 2026</span></span></li>
+            <li><span>The same record table cites <b class="nb">Google's AlphaEvolve</b> and university researchers</span></li>
+            <li><span>Treats <span class="nb">AI-written</span> code as <b>untrusted</b>: a separately written checker <span class="nb">re-tests</span> each result with zero tolerance for error</span></li>
+            <li><span>A <b>regression gate</b> confirms that a speed improvement leaves the results unchanged</span></li>
+            <li><span>Each result keeps an <b>audit trail</b> of how it was produced</span></li>
           </ul>
         </div>
       </article>
@@ -897,62 +937,34 @@
         </div>
       </article>
 
-      <p class="plate-tags"><span>Math<span class="sr">, </span></span><span>Optimization<span class="sr">, </span></span><span>Published records</span></p>
-      <article class="system" id="csqv" data-sys="csqv" data-state="validated" aria-labelledby="csqv-title">
-        <div class="sys-main">
-          <div class="sys-head">
-            <h2 id="csqv-title">CSQV Circle Packing</h2>
-            <span class="status" data-state="validated">Validated</span>
-          </div>
-          <p class="thesis">A math optimization solver written by Claude Code under human direction, with results validated by an independent third party.</p>
-          <div class="actions">
-            <a class="act" href="https://github.com/arnoldcastro5000/csqv-circle-packing">
-              Code<span class="sr"> for CSQV Circle Packing on GitHub</span>
-              <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true" focusable="false"><path d="M4.5 11.5l7-7M5.5 4.5h6v6"/></svg>
-            </a>
-            <p class="host">github.com/<wbr>arnoldcastro5000/<wbr><span class="nb">csqv-circle-packing</span></p>
-          </div>
-        </div>
-        <div class="sys-proof">
-          <ul class="readings">
-            <li><span><b><span class="nb">Third-party</span> validated:</b> <a href="https://www.packomania.com/csqv/csqv.html" target="_blank" rel="noopener noreferrer">Packomania<span class="sr"> (opens in a new tab)</span></a>, an independent public record site, accepted and published its results</span></li>
-            <li><span>Held published records, with <b class="nb">6 improvements</b> credited to Arnold Castro in <span class="nb">September 2026</span></span></li>
-            <li><span>The same record table cites <b class="nb">Google's AlphaEvolve</b> and university researchers</span></li>
-            <li><span>Treats <span class="nb">AI-written</span> code as <b>untrusted</b>: a separately written checker <span class="nb">re-tests</span> each result with zero tolerance for error</span></li>
-            <li><span>A <b>regression gate</b> confirms that a speed improvement leaves the results unchanged</span></li>
-            <li><span>Each result keeps an <b>audit trail</b> of how it was produced</span></li>
-          </ul>
-        </div>
-      </article>
-
       <div class="last-plate">
-        <p class="plate-tags"><span>Documentation<span class="sr">, </span></span><span>Nonprofit<span class="sr">, </span></span><span>Open source</span></p>
-        <article class="system" id="greenstand" data-sys="greenstand" data-state="live" aria-labelledby="greenstand-title">
+        <p class="plate-tags"><span>CSPM<span class="sr">, </span></span><span>Multi-cloud<span class="sr">, </span></span><span>Supply-chain</span></p>
+        <article class="system" id="prowler" data-sys="prowler" data-state="live" aria-labelledby="prowler-title">
           <div class="sys-main">
             <div class="sys-head">
-              <h2 id="greenstand-title">Understand Greenstand</h2>
+              <h2 id="prowler-title">Prowler</h2>
               <span class="status" data-state="live">Live</span>
             </div>
-            <p class="thesis"><span class="nb">Plain-language</span> documentation that helps new volunteers understand a nonprofit's <span class="nb">tree-tracking</span> platform.</p>
+            <p class="thesis">Defense in depth on a live system across AWS, GCP, and Azure.</p>
             <div class="actions">
-              <a class="act act--launch" href="https://greenstand.github.io/greenstand-documentation/">
-                Launch<span class="sr"> Understand Greenstand</span>
+              <a class="act act--launch" href="https://prowler.cloudsecuritypractice.com">
+                Launch<span class="sr"> Prowler</span>
                 <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true" focusable="false"><path d="M4.5 11.5l7-7M5.5 4.5h6v6"/></svg>
               </a>
-              <a class="act" href="https://github.com/Greenstand/greenstand-documentation">
-                Code<span class="sr"> for Understand Greenstand on GitHub</span>
+              <a class="act" href="https://github.com/arnoldcastro5000/prowler-cspm-demo">
+                Code<span class="sr"> for Prowler on GitHub</span>
                 <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true" focusable="false"><path d="M4.5 11.5l7-7M5.5 4.5h6v6"/></svg>
               </a>
-              <p class="host">greenstand.<wbr>github.io/<wbr><span class="nb">greenstand-documentation</span></p>
+              <p class="host">prowler.<wbr>cloudsecuritypractice.com</p>
             </div>
           </div>
           <div class="sys-proof">
             <ul class="readings">
-              <li><span>A <b class="nb">machine-built</b> site that documents 15 repositories at Greenstand, an <span class="nb">open-source</span> nonprofit platform that rewards tree growers</span></li>
-              <li><span>Turns <b class="nb">3,415 files</b> into interactive maps, onboarding guides, and a glossary of 277 business terms</span></li>
-              <li><span>AI drafts the docs, then <b>a person <span class="nb">re-checks</span></b> the system maps, where each link cites its source file</span></li>
-              <li><span>Public by design: <b class="nb">2 secret scanners</b> check the full history on every change, and a guard blocks private project names</span></li>
-              <li><span>The author contributes directly to Greenstand as Cloud Lead, with <b class="nb">26 pull requests</b></span></li>
+              <li><span><b>19/19</b> Prowler scan findings remediated, verified by <span class="nb">re-scan</span></span></li>
+              <li><span>Dashboard runs <b>24/7</b> on Cloud Run, reachable only through Cloudflare CDN, proxy, and WAF</span></li>
+              <li><span><b>5 CI gates</b> on every change: supply chain, SAST, secrets, IaC, containers</span></li>
+              <li><span>The <span class="nb">supply-chain</span> gate blocks <b>malicious</b> packages, not just vulnerable ones</span></li>
+              <li><span>The AI build agent ran <b>sandboxed</b>, with egress allowlisting</span></li>
             </ul>
           </div>
         </article>
@@ -988,7 +1000,7 @@
       const links = [...document.querySelectorAll(".index a[data-target]")];
       const lines = [...document.querySelectorAll(".continuum .em")];
       const plates = links.map((a) => document.getElementById(a.dataset.target));
-      let current = "prowler";
+      let current = links.find((a) => a.hasAttribute("aria-current")).dataset.target;
 
       // Register the rail ticks on the index lines, so every line lands on a tick.
       const register = () => {
