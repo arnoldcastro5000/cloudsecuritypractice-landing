@@ -1028,10 +1028,31 @@
         for (const p of plates) p.toggleAttribute("data-active", p.id === id);
       };
 
-      const io = new IntersectionObserver((entries) => {
-        for (const e of entries) if (e.isIntersecting) activate(e.target.id);
-      }, { rootMargin: "-45% 0px -50% 0px" });
-      for (const p of plates) io.observe(p);
+      // A jump to a plate puts the plate at its scroll margin below the top of the screen.
+      // A tall screen can then also show the next plate in the band,
+      // so the plate in the address wins while it stays where the jump put it.
+      const landed = () => {
+        const plate = document.querySelector(".system:target");
+        if (!plate) return null;
+        const at = parseFloat(getComputedStyle(document.documentElement).scrollPaddingTop)
+          + parseFloat(getComputedStyle(plate).scrollMarginTop);
+        return Math.abs(plate.getBoundingClientRect().top - at) < 2 ? plate : null;
+      };
+
+      // Otherwise the plate in the band from 45% to 50% down the screen becomes active.
+      // In the gap between two plates, the last active plate stays active.
+      const sync = () => {
+        const top = innerHeight * 0.45;
+        const bottom = innerHeight * 0.5;
+        const plate = landed() ?? plates.find((p) => {
+          const r = p.getBoundingClientRect();
+          return r.top < bottom && r.bottom > top;
+        });
+        if (plate) activate(plate.id);
+      };
+      sync();
+      addEventListener("scroll", sync, { passive: true });
+      addEventListener("resize", sync);
     })();
   </script>
 </body>
